@@ -20,3 +20,11 @@
 ** xref:module-04-management.adoc#resource_examination[Resource Examination]
 ** xref:module-04-management.adoc#data_protection[Data Protection Strategies]
 ** xref:module-04-management.adoc#resource_cloning[Resource Cloning Techniques]
+
+* xref:module-05-gitops.adoc[5. GitOps-Driven CI/CD]
+** xref:module-05-gitops.adoc#introduction_to_gitops[Introduction to GitOps]
+** xref:module-05-gitops.adoc#tekton_and_gitops[Tekton and GitOps]
+** xref:module-05-gitops.adoc#quay_and_gitops[Quay and GitOps]
+** xref:module-05-gitops.adoc#deploying_todo_app[Deploying the Todo App]
+** xref:module-05-gitops.adoc#managing_applications[Managing and Updating Applications]
+** xref:module-05-gitops.adoc#advanced_techniques[Advanced GitOps Techniques]

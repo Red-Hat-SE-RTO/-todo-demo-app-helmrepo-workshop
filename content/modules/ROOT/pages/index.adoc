@@ -1,47 +1,104 @@
-= Welcome to the {lab_name} !
+= GitOps-Driven CI/CD on OpenShift with Tekton Pipelines and Quay
 
 [%hardbreaks]
 == Introduction
-{product_description}
+Welcome to the workshop on implementing GitOps-driven CI/CD on OpenShift using Tekton Pipelines and Quay. This workshop is designed for developers and DevOps engineers with some Kubernetes experience who are interested in leveraging GitOps principles for continuous integration and continuous deployment (CI/CD) on OpenShift.
 
-{event_overview}
+== Target Audience
+This workshop is tailored for:
 
-== Who Will Benefit Most from Attending?
+* **Developers:** Those who want to understand how to automate their CI/CD pipelines using GitOps principles.
+* **DevOps Engineers:** Individuals responsible for managing and deploying applications on Kubernetes platforms like OpenShift.
 
-*Target Audience 1* -- Description of first target audience and their key responsibilities.
+== Workshop Outline
 
-*Target Audience 2* -- Description of second target audience and their key responsibilities.
+=== 1. Introduction to Tekton, GitOps, and OpenShift
 
-== What Content Is Covered?
+* **What is GitOps?**
+  GitOps is a set of practices that use Git repositories as the source of truth for defining the desired application state. It emphasizes declarative infrastructure, continuous delivery, and automated deployments.
 
-These are the *key sections* that will be covered:
+* **Why GitOps with OpenShift?**
+  OpenShift provides a robust platform for GitOps workflows with built-in support for Argo CD and Tekton. It offers a secure and scalable environment for deploying and managing applications.
 
-* _Section 1_: Detailed description of first section's focus and learning objectives.
+* **OpenShift GitOps and Argo CD:**
+  Argo CD is the GitOps engine in OpenShift, responsible for continuous delivery and automated deployments. It synchronizes the state of the cluster with the desired state defined in Git repositories.
 
-* _Section 2_: Detailed description of second section's focus and learning objectives.
+* **Tekton's Role in GitOps:**
+  Tekton is the CI component within the GitOps workflow. It automates the build, test, and delivery stages of the CI/CD process and integrates with Argo CD to trigger deployments based on Git changes.
 
-* _Section 3_: Detailed description of third section's focus and learning objectives.
+* **Kubernetes Management Tools:**
+  * **Kustomize:** A tool for customizing Kubernetes resource files and managing simple deployments.
+  * **Helm:** A package manager for Kubernetes that uses templating to deploy complex applications.
 
-* _Section 4_: Detailed description of fourth section's focus and learning objectives.
+=== 2. Quay and OpenShift GitOps
 
-== What is {product_name}?
+* **Introduction to Quay:**
+  Quay is a container registry that plays a crucial role in the CI/CD pipeline. It stores and manages container images used in deployments.
 
-* Key product characteristics and unique selling points
-* Licensing and entitlement information
-* Technical foundation and underlying technologies
-* Supported deployment scenarios
-* Integration capabilities
+* **Connecting Quay with Argo CD:**
+  Learn how to configure Argo CD to automatically update deployments based on new images pushed to Quay.
 
-== Why Switch to This Solution?
+* **Security Considerations:**
+  Discuss best practices for securing container images in Quay and within a GitOps workflow.
 
-**Strategic Benefit 1:**
-Detailed explanation of first strategic benefit
+* **(Hands-on):**
+  Participants will configure Quay integration within their GitOps repository.
 
-**Strategic Benefit 2:**
-Detailed explanation of second strategic benefit
+=== 3. Tekton Pipelines for GitOps
 
-**Strategic Benefit 3:**
-Detailed explanation of third strategic benefit
+* **Tekton and GitOps:**
+  Understand how Tekton pipelines can trigger deployments based on changes in the Git repository.
+
+* **Building and Pushing Images:**
+  Demonstrate how to use Tekton to build container images and push them to Quay, initiating the GitOps deployment process.
+
+* **Tekton and Argo CD Integration:**
+  Show how to integrate Tekton with Argo CD for a seamless GitOps workflow.
+
+* **(Hands-on):**
+  Participants will modify Tekton pipelines to work with Argo CD and trigger deployments based on Git events.
+
+=== 4. Deploying the Todo App with GitOps
+
+* **Setting up the GitOps Repository:**
+  Guide participants through setting up a Git repository with the necessary configuration files for the Todo application.
+
+* **Defining the Desired State:**
+  Explain how to define the desired state of the application in Git, including deployments, services, and other resources.
+
+* **Using Argo CD for Deployment:**
+  Demonstrate how to use Argo CD to synchronize the application deployment on OpenShift with the Git repository.
+
+* **(Hands-on):**
+  Participants will deploy the Todo app using GitOps principles, observing how Argo CD automates the process.
+
+=== 5. Managing and Updating Applications with GitOps
+
+* **Making Changes through Git:**
+  Show how to update the application by making changes to the configuration files in the Git repository.
+
+* **Automated Updates with Argo CD:**
+  Demonstrate how Argo CD automatically detects changes in the Git repository and deploys the updates to OpenShift.
+
+* **Rollbacks and Version Control:**
+  Explain how GitOps facilitates rollbacks and version control for application deployments.
+
+* **(Hands-on):**
+  Participants will update the Todo app and practice performing rollbacks using Git and Argo CD.
+
+=== 6. Advanced GitOps Techniques (Optional)
+
+* **Progressive Delivery:**
+  Introduce techniques like canary deployments and blue/green deployments using Argo CD.
+
+* **Multi-Environment Deployments:**
+  Discuss strategies for managing deployments across different environments (e.g., development, staging, production) with GitOps.
+
+* **Observability and Monitoring:**
+  Show how to integrate observability tools for monitoring application health and troubleshooting deployments.
+
+* **(Hands-on):**
+  Participants can engage in advanced exercises or demonstrations based on their interests and skill levels.
 
 == Next Steps
 
