@@ -177,3 +177,66 @@ image::module-01-intro/22_Migrated.png[link=self, window=blank, width=100%]
 == Summary
 
 In this lab, we reviewed virtual machine state management tasks, and executed a live migration of a VM. Both of these are common and necessary tasks as platform administrators and a great way to familiarize yourself with some basic features available when working with VMs in OpenShift Virtualization.
+
+== Workshop Title: GitOps-Driven CI/CD on OpenShift with Tekton Pipelines and Quay
+
+== Target Audience: Developers and DevOps engineers with some Kubernetes experience, interested in implementing GitOps principles for CI/CD on OpenShift.
+
+== Workshop Outline:
+
+=== 1. Introduction to Tekton, GitOps, and OpenShift
+
+==== What is GitOps?
+
+GitOps is a modern approach to managing infrastructure and applications using Git repositories as the single source of truth. It leverages Git workflows to automate the deployment, management, and monitoring of infrastructure and applications. The core principles of GitOps include:
+
+* **Declarative Configuration**: All infrastructure and application configurations are stored in Git repositories in a declarative format (e.g., YAML, JSON).
+* **Version Control**: Changes to the infrastructure and applications are tracked and versioned in Git, providing a history of changes and the ability to roll back to previous states.
+* **Automated Deployment**: Changes to the Git repository automatically trigger the deployment of the corresponding infrastructure and applications.
+* **Continuous Monitoring**: The state of the infrastructure and applications is continuously monitored and reconciled with the desired state defined in the Git repository.
+
+==== Why GitOps with OpenShift?
+
+OpenShift provides a robust platform for implementing GitOps workflows with built-in support for tools like Argo CD and Tekton. OpenShift's integration with these tools simplifies the implementation of GitOps practices, enabling:
+
+* **Automated Deployments**: Continuous delivery and automated deployments based on Git changes.
+* **Consistency and Reliability**: Ensures that the infrastructure and applications are always in the desired state.
+* **Collaboration and Auditing**: Facilitates collaboration among teams and provides a clear audit trail of changes.
+
+==== OpenShift GitOps and Argo CD
+
+Argo CD is the GitOps engine in OpenShift, responsible for continuous delivery and automated deployments. It continuously monitors the Git repository for changes and ensures that the deployed infrastructure and applications match the desired state defined in the repository. Key features of Argo CD include:
+
+* **Automated Sync**: Automatically synchronizes the deployed state with the desired state in the Git repository.
+* **Health Monitoring**: Monitors the health of applications and infrastructure, providing alerts and insights.
+* **Rollback and Rollout**: Supports easy rollback to previous versions and controlled rollout of new versions.
+
+==== Tekton's Role in GitOps
+
+Tekton is the CI component within the GitOps workflow, responsible for automating the build, test, and delivery stages of the CI/CD process. Tekton pipelines are triggered by changes in the Git repository and integrate seamlessly with Argo CD to trigger deployments. Key features of Tekton include:
+
+* **Pipeline Automation**: Automates the build, test, and delivery stages of the CI/CD process.
+* **Integration with Argo CD**: Triggers deployments based on successful pipeline executions.
+* **Customizable Pipelines**: Allows for the creation of custom pipelines tailored to specific project requirements.
+
+==== Kubernetes Management Tools
+
+=== Kustomize
+
+Kustomize is a tool for customizing Kubernetes resource configuration files. It allows you to manage simple deployments by applying overlays to base configurations. Key features of Kustomize include:
+
+* **Base and Overlay**: Allows you to define a base configuration and apply overlays for different environments (e.g., development, staging, production).
+* **Patching**: Supports patching of existing configurations to apply specific changes without modifying the base configuration.
+* **Simplified Management**: Simplifies the management of Kubernetes resource configurations by providing a clear separation of base and environment-specific configurations.
+
+=== Helm
+
+Helm is a package manager for Kubernetes that uses charts to define, install, and upgrade complex Kubernetes applications. Key features of Helm include:
+
+* **Templating Engine**: Provides a powerful templating engine for generating Kubernetes resource configurations.
+* **Package Management**: Simplifies the installation and management of complex applications by providing pre-configured packages (charts).
+* **Versioning and Rollback**: Supports versioning of charts and easy rollback to previous versions.
+
+== Summary
+
+In this workshop, we introduced the core concepts of GitOps, explored how OpenShift integrates with Argo CD and Tekton to implement GitOps workflows, and discussed the role of Kubernetes management tools like Kustomize and Helm in managing infrastructure and applications. By the end of this workshop, participants will have a solid understanding of how to implement GitOps principles for CI/CD on OpenShift using Tekton Pipelines and Quay.
