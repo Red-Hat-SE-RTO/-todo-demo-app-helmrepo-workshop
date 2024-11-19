@@ -1,3 +1,8 @@
 www/*
 .cache
 
+aider-env/
+aider-env/bin/activate
+aider_setup.sh
+.aider*
+.env

@@ -60,15 +60,17 @@ To get the most out of this workshop, participants should have:
 
 The workshop will last for [X] hours, with breaks and hands-on exercises throughout. The schedule is as follows:
 
-| Time | Topic |
-| --- | --- |
-| [X] | Introduction and overview of the workshop |
-| [X] | Introduction to GitOps and OpenShift |
-| [X] | Quay and OpenShift GitOps |
-| [X] | Tekton Pipelines for GitOps |
-| [X] | Deploying the Todo App with GitOps |
-| [X] | Managing and Updating Applications with GitOps |
-| [X] | Advanced GitOps Techniques (Optional) |
+[cols="2,1"]
+|===
+| Time | Topic
+| [X] | Introduction and overview of the workshop
+| [X] | Introduction to GitOps and OpenShift
+| [X] | Quay and OpenShift GitOps
+| [X] | Tekton Pipelines for GitOps
+| [X] | Deploying the Todo App with GitOps
+| [X] | Managing and Updating Applications with GitOps
+| [X] | Advanced GitOps Techniques (Optional)
+|===
 
 == Additional Resources
 
