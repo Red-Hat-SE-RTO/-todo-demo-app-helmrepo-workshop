@@ -1,38 +1,79 @@
-Welcome to the [Roadshow Name]!
+= GitOps-Driven CI/CD Workshop on OpenShift with Tekton Pipelines and Quay
 
-== Introduction
-This repository hosts the lab guide for the [Roadshow Name], which can be delivered by Red Hat Associates to customers and interested parties all over the world.
+== Welcome to the GitOps-Driven CI/CD Workshop on OpenShift with Tekton Pipelines and Quay
 
-It is designed to work with the Showroom lab environment provided by the Red Hat Demo Platform (RHDP) team.
+This workshop aims to introduce participants to the world of GitOps and its applications in continuous integration and continuous deployment (CI/CD) on OpenShift using Tekton pipelines and Quay. The workshop is designed for developers and DevOps engineers with some Kubernetes experience, interested in implementing GitOps principles for CI/CD on OpenShift.
 
-This roadshow event is organized to allow you to have a hands-on experience with [Key Technology].
+== Learning Objectives
 
-[Key Technology] enables you to [briefly describe the technology and its benefits].
+By the end of this workshop, participants will be able to:
 
-In this event, we will explore many common management activities that [target audience] often encounter in their day-to-day workflows.
+* Understand the core concepts of GitOps and its benefits for CI/CD
+* Learn to implement GitOps workflows on OpenShift using Tekton and Argo CD
+* Gain experience managing application deployments through Git repositories
+* Integrate Quay into the GitOps pipeline for container image management
 
-== Who Will Benefit Most from attending a Roadshow?
+== Workshop Outline
 
-[Target Audience 1] -- Those responsible for day-to-day management of [specific tasks or areas] in [Key Technology]. These users will often find themselves responsible for [specific tasks or activities].
-[Target Audience 2] -- Those responsible for [specific areas or tasks] hosting the [Key Technology] solution. These users will be responsible for [specific tasks or activities].
-== What Content Is Covered In The Roadshow?
+The workshop will cover the following topics:
 
-These are the * [number] * main sections that will be covered:
+1. **Introduction to GitOps and OpenShift**
+	* What is GitOps?
+	* Kubernetes management tools: Kustomize, Helm, and Argo CD
+	* Why GitOps with OpenShift?
+2. **Quay and OpenShift GitOps**
+	* Introduction to Quay
+	* Connecting Quay with Argo CD
+	* Security considerations for container images in Quay and GitOps
+	* Hands-on: Configure Quay integration in your GitOps repository
+3. **Tekton Pipelines for GitOps**
+	* Tekton and GitOps
+	* Building and pushing images using Tekton
+	* Tekton and Argo CD integration
+	* Hands-on: Modify Tekton pipelines to work with Argo CD and trigger deployments
+4. **Deploying the Todo App with GitOps**
+	* Setting up the GitOps repository
+	* Defining the desired state of the application
+	* Using Argo CD for deployment
+	* Hands-on: Deploy the Todo app using GitOps principles
+5. **Managing and Updating Applications with GitOps**
+	* Making changes through Git
+	* Automated updates with Argo CD
+	* Rollbacks and version control with GitOps
+	* Hands-on: Update the Todo app and practice rollbacks using Git and Argo CD
+6. **Advanced GitOps Techniques (Optional)**
+	* Progressive delivery: canary deployments and blue/green deployments
+	* Multi-environment deployments
+	* Observability and monitoring
+	* Hands-on: Engage in advanced exercises or demonstrations
 
-[Section 1 Title]: In this section, we will [briefly describe the content].
-[Section 2 Title]: In this section, we will [briefly describe the content]. *...
-[Section 8 Title]: In this section, we will [briefly describe the content].
-== Version Information
+== Prerequisites
 
-This edition of the [Roadshow Name] has been developed using the following software versions:
+To get the most out of this workshop, participants should have:
 
-[Technology 1] [version number]
-[Technology 2] [version number] *...
-[Technology N] [version number]
-Replace the placeholders with the actual content:
+* Basic knowledge of Kubernetes and container orchestration
+* Familiarity with Git and version control systems
+* Access to a local OpenShift cluster or a cloud-based OpenShift deployment
+* Tekton and Argo CD installed and configured on your OpenShift cluster
 
-[Roadshow Name]: the name of the roadshow
-[Key Technology]: the key technology being covered (e.g. OpenShift Virtualization)
-[Target Audience 1] and [Target Audience 2]: the target audiences for the roadshow
-[Section 1 Title] to [Section 8 Title]: the titles of the sections
-[Technology 1] to [Technology N]: the technologies being used in the roadshow
+== Schedule
+
+The workshop will last for [X] hours, with breaks and hands-on exercises throughout. The schedule is as follows:
+
+| Time | Topic |
+| --- | --- |
+| [X] | Introduction and overview of the workshop |
+| [X] | Introduction to GitOps and OpenShift |
+| [X] | Quay and OpenShift GitOps |
+| [X] | Tekton Pipelines for GitOps |
+| [X] | Deploying the Todo App with GitOps |
+| [X] | Managing and Updating Applications with GitOps |
+| [X] | Advanced GitOps Techniques (Optional) |
+
+== Additional Resources
+
+* [List any additional resources, such as slides, videos, or code samples]
+
+== Conclusion
+
+By the end of this workshop, participants will have gained a comprehensive understanding of GitOps and its applications in CI/CD on OpenShift using Tekton pipelines and Quay. They will be able to design and implement their own GitOps workflows and manage application deployments through Git repositories.
