@@ -1,6 +1,6 @@
 ---
 site:
-  title: "Welcome to the [Roadshow Name]!"
+  title: "GitOps-Driven CI/CD on OpenShift with Tekton Pipelines and Quay"
   # url: https://redhat-scholars.github.io/course-template
   start_page: modules::index.adoc
 
