@@ -30,19 +30,15 @@ This workshop is tailored for:
   * **Kustomize:** A tool for customizing Kubernetes resource files and managing simple deployments.
   * **Helm:** A package manager for Kubernetes that uses templating to deploy complex applications.
 
-=== 2. Quay and OpenShift GitOps
+=== 2. Quay and OpenShift Pipelines**
 
-* **Introduction to Quay:**
-  Quay is a container registry that plays a crucial role in the CI/CD pipeline. It stores and manages container images used in deployments.
+*   **Introduction to Quay:** Red Hat Quay is a robust container registry that stores, builds, and deploys container images. In the CI/CD pipeline, Quay serves as a central repository for container images, facilitating efficient storage, versioning, and distribution. It also offers features like image vulnerability scanning and mirroring, enhancing security and reliability in the development workflow. 
 
-* **Connecting Quay with Argo CD:**
-  Learn how to configure Argo CD to automatically update deployments based on new images pushed to Quay.
+*   **Integrating Quay with OpenShift Pipelines:** To automate the CI/CD process, integrate Quay with OpenShift Pipelines (based on Tekton). This integration allows pipelines to push newly built images to Quay and trigger subsequent tasks, such as deployments or notifications. For instance, configuring Tekton pipelines to push images to Quay can be achieved by creating a secret with Quay credentials and referencing it in the pipeline tasks. 
 
-* **Security Considerations:**
-  Discuss best practices for securing container images in Quay and within a GitOps workflow.
+*   **Security Considerations:** Securing container images in Quay involves implementing best practices such as enabling image vulnerability scanning, using signed images, and enforcing access controls. Integrating security tools like Sigstore and Tekton Chains can further enhance the security posture by providing image signing and verification capabilities. 
 
-* **(Hands-on):**
-  Participants will configure Quay integration within their GitOps repository.
+*   **Hands-on Exercise:** Participants will configure Quay integration within their OpenShift Pipelines setup. This includes creating a Quay repository, setting up necessary credentials, and modifying pipeline configurations to push images to Quay. Additionally, participants will implement security measures such as enabling image scanning and signing to ensure the integrity and security of their container images.  
 
 === 3. Tekton Pipelines for GitOps
 
