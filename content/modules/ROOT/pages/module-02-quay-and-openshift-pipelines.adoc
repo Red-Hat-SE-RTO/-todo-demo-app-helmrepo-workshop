@@ -8,9 +8,9 @@ This module introduces the integration of Quay as a container registry with Open
 == Key Learning Objectives
 
 * Understand the role of Quay as a container registry in the CI/CD pipeline.
-* Learn how to integrate Quay with OpenShift Pipelines for automated deployment updates.
+* Configuing your repo with a Quay Pull secret for your Tekton Pipelines.
+* Pre-Configuring your enviornment to push images to Quay using Tekton Pipelines.
 * Explore best practices for securing container images in Quay and within a CI/CD workflow.
-* Hands-on experience configuring Quay integration within OpenShift Pipelines.
 
 == Introduction to Quay
 
@@ -20,9 +20,21 @@ Red Hat Quay is a robust container registry that stores, builds, and deploys con
 
 To automate the CI/CD process, integrate Quay with OpenShift Pipelines (based on Tekton). This integration allows pipelines to push newly built images to Quay and trigger subsequent tasks, such as deployments or notifications. For instance, configuring Tekton pipelines to push images to Quay can be achieved by creating a secret with Quay credentials and referencing it in the pipeline tasks.
 
+=== Steps for Integration:
+1. **Understand the Role of Quay**: Learn how Quay operates as a container registry in the CI/CD pipeline and its importance in image storage and distribution.
+2. **Configure a Quay Pull Secret**: Set up your repository with a Quay Pull secret to ensure Tekton Pipelines can pull required images securely.
+3. **Prepare the Environment**: Pre-configure your environment to push container images to Quay during pipeline execution.
+4. **Create and Reference Secrets**: Store Quay credentials securely in a Kubernetes secret and reference them in your Tekton pipeline tasks for seamless integration.
+
 == Security Considerations
 
 Securing container images in Quay involves implementing best practices such as enabling image vulnerability scanning, using signed images, and enforcing access controls. Integrating security tools like Sigstore and Tekton Chains can further enhance the security posture by providing image signing and verification capabilities.
+
+=== Best Practices for Securing Container Images:
+- **Enable Vulnerability Scanning**: Use Quay's built-in image scanning capabilities to identify and address vulnerabilities proactively.
+- **Enforce Signed Images**: Leverage signing mechanisms to verify image authenticity and integrity.
+- **Access Control**: Restrict access to sensitive repositories and enforce role-based access controls.
+- **Integrate Advanced Security Tools**: Utilize tools like Sigstore and Tekton Chains to enable automated image signing and verification within the CI/CD pipeline.
 
 == Hands-on Exercise: Configuring Quay Integration
 
@@ -34,45 +46,106 @@ Securing container images in Quay involves implementing best practices such as e
 
 === Login to OpenShift Cluster
 
-Ensure you are logged in to your OpenShift cluster using the appropriate credentials.
-Username: {additional_user}
+*Ensure you are logged in to your OpenShift cluster using the appropriate credentials.*
+
+* Username: {additional_user}
+
 [source,bash]
 ----
 oc login -u <username> -p <password> <cluster-url>
 ----
 
+=== Configure Gitea
+*Access the Gita URL*
+
+image::https://i.imgur.com/geLhBZt.png[20241120132152]
+
+*Using OpenShift CLI*
 [source,bash]
 ----
-# Example command to create a Quay repository
-quayctl create repository --name my-app --visibility public
-
-# Example command to configure automated builds
-quayctl configure build --repository my-app --trigger github
-
-# Example command to integrate Quay with Tekton pipeline
-kubectl create secret docker-registry quay-secret --docker-server=quay.io --docker-username=my-username --docker-password=my-password --docker-email=my-email
-
-# Example Tekton pipeline task to push image to Quay
-apiVersion: tekton.dev/v1beta1
-kind: Task
-metadata:
-  name: push-to-quay
-spec:
-  steps:
-    - name: push-image
-      image: docker
-      script: |
-        docker login -u $(params.username) -p $(params.password) quay.io
-        docker push quay.io/my-username/my-app:latest
+echo "USER ME: $(oc get route -n quay-registry    | grep quay-registry  | awk '{print $2}')"
 ----
+
+*Login using your username and password*
+
+image::https://i.imgur.com/NYongvc.png[20241120132256]
+
+image::https://i.imgur.com/SlaEcvQ.png[20241120132320]
+
+=== Configure Quay 
+*Access the Quay repo URL*
+
+image::https://i.imgur.com/2OAy0PI.png[20241120131939]
+
+*Create User account in Quay*
+
+* Username: your-username
+* Email: your-username@example.com
+* Password: quay-playground
+
+image::https://i.imgur.com/eJ1FRp1.png[20241120132529]
+
+*Create todo-app Repository*
+
+TIP: REPONAME: todo-demo-app-yourusername
+
+image::https://i.imgur.com/nZlQfh3.png[20241120132918]
+
+image::https://i.imgur.com/5L48WnP.png[20241120132949]
+
+*Create Robot accout for Repo*
+
+TIP: Click on Account Settings
+
+image::https://i.imgur.com/7raL0gY.png[20241120133048]
+
+*Click on Robot Accounts*
+
+image::https://i.imgur.com/Y4ocPGk.png[20241120133132]
+
+*Click on `Create robot account`*
+
+TIP: Provide a name for your new robot account: todo_demo_app_yourusername
+
+image::https://i.imgur.com/cO1EaVF.png[20241120133242]
+
+image::https://i.imgur.com/5We8Sua.png[20241120133355]
+
+*Add Permissions to the created account* 
+
+image::(https://i.imgur.com/KdlqZx3.png)[20241120133453]
+
+image::(https://i.imgur.com/v1ba4RE.png)[20241120133542]
+
+*Collect Credentials 
+
+image::https://i.imgur.com/arAZrBY.png[20241120133857]
+
+=== Configure OpenShift Secret
+
+*Copy secret into OpenShift with the name container-registry-secret-yourusername*
+
+TIP:  Click on Kubernetes Secret -> View  yourusername+todo_demo_app_yourusername.yaml
+
+image::https://i.imgur.com/2k9ORSd.png[20241120134031]
+
+*Copy secret into OpenShift with the name container-registry-secret*
+
+TIP: Use the + icon in the top right corner of the OpenShift console to quickly add YAML. Make sure you are in the todo-demo-app-yourusername!
+
+image::https://i.imgur.com/5pHGOUf.png[20241120134226]
+
+image::https://i.imgur.com/7MMi7aB.png[20241120134252]
+
 
 == Module Summary
 
 In this module, we explored the integration of Quay as a container registry with OpenShift Pipelines using Tekton. Key takeaways include:
 
 * Understanding the role of Quay in the CI/CD pipeline.
-* Configuring Tekton pipelines to push images to Quay.
-* Implementing best practices for securing container images in Quay.
+* Configuing your repo with a Quay Pull secret for your Tekton Pipelines.
+* Pre-Configuring your enviornment to push images to Quay using Tekton Pipelines.
+
 
 == Knowledge Check
 
