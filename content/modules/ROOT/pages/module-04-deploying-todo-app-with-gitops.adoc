@@ -1,235 +1,138 @@
-= Module 4: Operational Management and Day-2 Operations
+= Module 4: Deploying the Todo App with GitOps
 
 [%hardbreaks]
 == Module Overview
 
-This module focuses on the critical aspects of operational management, covering the essential skills and strategies required for maintaining, monitoring, and optimizing {product_name} in production environments.
+This module focuses on deploying a Todo application using GitOps principles. Participants will learn how to set up a GitOps repository, define the desired state of the application, and use Argo CD for deployment. Additionally, they will explore Gitea as an alternative Git service and perform hands-on tasks to deploy the Todo app using GitOps.
 
 == Key Learning Objectives
 
-* Understand comprehensive operational management strategies
-* Learn advanced monitoring and troubleshooting techniques
-* Explore lifecycle management approaches
-* Develop skills in configuration management
-* Implement effective maintenance and optimization practices
+* Understand the GitOps workflow for application deployment.
+* Learn how to set up and manage a GitOps repository.
+* Use Argo CD for real-time synchronization and health monitoring.
+* Explore Gitea as a self-hosted Git service and its integration with Argo CD.
+* Deploy a Todo app using GitOps principles and observe automated deployment processes.
 
-== Operational Management Framework
+== Setting up the GitOps Repository
 
-=== Core Management Domains
+=== Initializing the Git Repository
 
-[cols="1,3"]
-|===
-| Management Domain | Key Responsibilities
+To begin, participants need to set up a Git repository with the necessary configuration files for the Todo application. Follow these steps:
 
-| Configuration Management
-| Maintain consistent system configurations
-| Lifecycle Management
-| Handle deployments, upgrades, and decommissioning
+1. Create a new repository on your preferred Git hosting service (e.g., GitHub, GitLab).
+2. Clone the repository to your local machine:
+   ```bash
+   git clone <repository-url>
+   cd <repository-name>
+   ```
+3. Initialize the GitOps structure by creating the following directories:
+   ```bash
+   mkdir -p manifests/base manifests/overlays/production
+   ```
+4. Add the necessary Kubernetes manifests (e.g., deployment.yaml, service.yaml) to the `manifests/base` directory.
+5. Commit and push the changes to the repository:
+   ```bash
+   git add .
+   git commit -m "Initialize GitOps repository"
+   git push origin main
+   ```
 
-| Performance Optimization
-| Tune system resources and application performance
+=== GitOps-Compatible Structure
 
-| Compliance and Governance
-| Ensure adherence to organizational policies and standards
+Ensure your repository follows a GitOps-compatible structure. This typically includes:
 
-| Security Management
-| Implement and maintain security controls
-|===
+* A `base` directory for common configurations.
+* An `overlays` directory for environment-specific configurations (e.g., production, staging).
+* Kubernetes manifests (YAML files) defining the desired state of the application.
 
-== Configuration Management
+== Defining the Desired State
 
-=== Configuration Management Approaches
+=== Key Resources
 
-==== Declarative Configuration
-* State-based configuration management
-* Version-controlled configurations
-* Automated reconciliation
+Define the desired state of the Todo application in Git. Key resources include:
 
-==== Configuration Patterns
+* **Deployment:** Specifies the desired state of the application pods.
+* **Service:** Exposes the application to the network.
+* **ConfigMap/Secret:** Stores configuration data and sensitive information.
 
-[cols="1,2,3"]
-|===
-| Pattern | Description | Use Cases
+=== Version Control and Traceability
 
-| Immutable Infrastructure
-| Replace entire infrastructure instead of modifying
-| Consistent deployments, reduced configuration drift
+Emphasize the importance of version control and traceability in GitOps:
 
-| Dynamic Configuration
-| Real-time configuration updates
-| Flexible, responsive environments
+* Use Git branches for different environments (e.g., main for production, develop for staging).
+* Tag releases for traceability and rollback capabilities.
+* Maintain detailed commit messages to track changes.
 
-| Template-Based Provisioning
-| Standardized configuration templates
-| Consistent environment creation
-|===
+== Using Argo CD for Deployment
 
-== Monitoring and Observability
+=== Synchronizing with Argo CD
 
-=== Monitoring Strategies
+Demonstrate how to use Argo CD to synchronize the application deployment on OpenShift with the Git repository:
 
-==== Comprehensive Monitoring Approach
+1. Install Argo CD on your OpenShift cluster.
+2. Create an Argo CD application pointing to your Git repository:
+   ```bash
+   argocd app create todo-app \
+     --repo <repository-url> \
+     --path manifests/overlays/production \
+     --dest-server https://kubernetes.default.svc \
+     --dest-namespace default
+   ```
+3. Sync the application to deploy it:
+   ```bash
+   argocd app sync todo-app
+   ```
 
-* *Performance Monitoring*
-** Resource utilization tracking
-** Response time analysis
-** Bottleneck identification
+=== Real-Time Synchronization and Health Monitoring
 
-* *Log Management*
-** Centralized logging
-** Log aggregation
-** Correlation and analysis
+Highlight Argo CD features such as:
 
-* *Alerting Mechanisms*
-** Threshold-based alerts
-** Predictive monitoring
-** Automated incident response
+* **Real-Time Synchronization:** Automatically updates the deployment when changes are pushed to the Git repository.
+* **Health Monitoring:** Monitors the health of the application and reports any issues.
 
-=== Observability Tools and Techniques
+== Exploring the Gitea Repository
 
-[cols="1,2,3"]
-|===
-| Tool Category | Key Capabilities | Example Tools
+=== Setting Up Gitea
 
-| Metrics Collection
-| Performance data gathering
-| Prometheus, Graphite
+Introduce Gitea as an alternative self-hosted Git service:
 
-| Log Management
-| Centralized log aggregation
-| ELK Stack, Splunk
+1. Deploy Gitea on your OpenShift cluster.
+2. Create a new repository in Gitea.
+3. Push your GitOps repository to Gitea:
+   ```bash
+   git remote add gitea <gitea-repository-url>
+   git push gitea main
+   ```
 
-| Tracing
-| Distributed system tracking
-| Jaeger, Zipkin
+=== Integration with Argo CD
 
-| Visualization
-| Dashboard and reporting
-| Grafana, Kibana
-|===
+Discuss integrating Gitea with Argo CD:
 
-== Lifecycle Management
+* **Repository Authentication:** Use Gitea tokens for authentication.
+* **Webhooks:** Configure webhooks in Gitea to trigger Argo CD synchronization.
 
-=== Deployment Strategies
+== Hands-On Task
 
-==== Deployment Patterns
+=== Deploying the Todo App
 
-* Blue-Green Deployments
-* Canary Releases
-* Rolling Updates
-* A/B Testing
+Participants will deploy the Todo app using GitOps principles:
 
-=== Upgrade Management
-
-* Minimal downtime upgrades
-* Rollback capabilities
-* Automated validation
-* Incremental update approaches
-
-== Performance Optimization
-
-=== Resource Optimization Techniques
-
-* Dynamic resource allocation
-* Workload scheduling
-* Resource quotas and limits
-* Capacity planning
-
-=== Performance Tuning Strategies
-
-[cols="1,2"]
-|===
-| Optimization Area | Techniques
-
-| Compute
-| CPU pinning, resource reservation
-
-| Memory
-| Transparent huge pages, memory overcommitment
-
-| Network
-| Traffic shaping, network policy optimization
-
-| Storage
-| Caching strategies, I/O optimization
-|===
-
-== Hands-on Exercise: Operational Management
-
-=== Exercise Objectives
-* Implement advanced monitoring configuration
-* Demonstrate lifecycle management
-* Practice performance optimization techniques
-
-[source,bash]
-----
-# Example operational management command
-{management_cli} configure monitor \
-    --strategy comprehensive \
-    --alert-level advanced \
-    --log-retention 90d
-----
-
-== Compliance and Governance
-
-=== Governance Frameworks
-
-* Policy-driven management
-* Automated compliance checks
-* Audit trail maintenance
-* Role-based access control
-
-== Security Management
-
-=== Security Operations
-
-* Continuous security scanning
-* Vulnerability management
-* Automated security compliance
-* Incident response planning
-
-== Best Practices
-
-. Implement comprehensive monitoring
-. Use declarative configuration management
-. Automate repetitive tasks
-. Maintain detailed documentation
-. Regularly review and optimize configurations
-
-== Troubleshooting Techniques
-
-* Systematic problem isolation
-* Log-based diagnostics
-* Performance analysis
-* Root cause investigation
-
-== Knowledge Check
-
-. Describe three configuration management approaches
-. Explain the principles of observability
-. How do you implement a blue-green deployment?
-
-== Advanced Topics
-
-* Multi-cluster management
-* Advanced performance tuning
-* Complex incident response strategies
+1. Clone the GitOps repository.
+2. Define the desired state in the repository.
+3. Use Argo CD to deploy the application.
+4. Explore Gitea features such as repository creation, managing pull requests, and configuring webhook triggers.
+5. Observe how Argo CD automates the deployment process, ensuring the application matches the defined desired state in Git.
 
 == Module Summary
 
-Key takeaways from the operational management module:
-* Comprehensive monitoring strategies
-* Advanced configuration management
-* Lifecycle and performance optimization
-* Compliance and security considerations
+Key takeaways from this module include:
 
-== Recommended Tools and Resources
-
-* Kubernetes management platforms
-* Monitoring and observability solutions
-* Configuration management tools
-* Performance optimization frameworks
+* Understanding the GitOps workflow for application deployment.
+* Setting up and managing a GitOps repository.
+* Using Argo CD for real-time synchronization and health monitoring.
+* Exploring Gitea as a self-hosted Git service and its integration with Argo CD.
+* Deploying a Todo app using GitOps principles and observing automated deployment processes.
 
 == Next Steps
 
-Prepare to apply operational management concepts in advanced scenarios in the next module.
+Prepare to apply GitOps principles in advanced scenarios in the next module.

@@ -1,190 +1,58 @@
-= Module 3: Infrastructure Management
+= Module 3: Tekton Pipelines for GitOps
 
 [%hardbreaks]
 == Module Overview
 
-This module focuses on infrastructure management strategies, deployment models, and operational considerations for {product_name}. Participants will gain insights into infrastructure provisioning, scaling, and optimization techniques.
+This module focuses on leveraging Tekton pipelines to automate CI/CD workflows in a GitOps context. Participants will gain insights into how Tekton integrates with GitOps principles, enabling seamless and automated deployments.
 
 == Key Learning Objectives
 
-* Understand infrastructure deployment models
-* Learn about scalability and resource management
-* Explore infrastructure-as-code principles
-* Develop skills in infrastructure provisioning
-* Understand monitoring and observability strategies
+* Understand the integration of Tekton with GitOps
+* Learn how to build and push container images using Tekton
+* Explore the core concepts of Tekton pipelines
+* Develop hands-on skills in configuring and running Tekton pipelines
+* Understand troubleshooting techniques for common pipeline issues
 
-== Infrastructure Deployment Models
+== Tekton and GitOps
 
-=== Deployment Topologies
+Tekton pipelines enable GitOps by triggering deployments based on changes in a Git repository. This approach ensures that updates in the source code or configuration files are automatically reflected in the pipeline workflow.
 
-[cols="1,2,3"]
-|===
-| Deployment Type | Characteristics | Key Considerations
+== Building and Pushing Images with Tekton
 
-| Single-Node
-| Minimal resource footprint
-| Development, small-scale testing
+Tekton pipelines are powerful tools for automating the building of container images and pushing them to Quay. This integration is a key part of the GitOps workflow, as it simplifies and secures the image management process.
 
-| Clustered
-| Multiple nodes, distributed processing
-| Production, high availability
+== Understanding the Logic of Tekton Pipelines (For New Users)
 
-| Hybrid
-| Mix of on-premises and cloud resources
-| Flexible scaling, cost optimization
+Tekton pipelines follow a declarative approach to define the steps in a CI/CD workflow. Here's a breakdown of the core concepts:
 
-| Edge-Optimized
-| Lightweight, resource-constrained environments
-| IoT, remote locations
-|===
+=== Pipelines
+- A **Pipeline** is the overall workflow, consisting of a series of tasks executed in sequence or parallel.
+- Each pipeline defines:
+  - **Parameters**: Inputs to the pipeline (e.g., image URLs, Git repository URLs).
+  - **Tasks**: The individual steps performed in the workflow.
 
-== Resource Management
+=== Tasks
+- A **Task** is a sequence of steps that perform a specific action, such as building a container image or running tests.
+- Each task defines:
+  - **Steps**: The individual commands or scripts executed in the task.
+  - **Workspaces**: Shared storage areas used to pass data between tasks.
 
-=== Resource Allocation Strategies
+=== PipelinesRuns
+- A **PipelineRun** is an instance of a pipeline that is executed with specific inputs and parameters.
+- It tracks the execution status and logs of the pipeline.
 
-==== Compute Resources
-* CPU allocation models
-* Memory management
-* Performance optimization techniques
+=== TaskRuns
+- A **TaskRun** is an instance of a task that is executed as part of a pipeline.
+- It tracks the execution status and logs of the task.
 
-==== Storage Provisioning
-* Storage class definitions
-* Dynamic vs. static provisioning
-* Performance and capacity planning
+== Hands-On Exercises
 
-==== Network Configuration
-* Network overlay models
-* Multi-network support
-* Network policy implementation
+In this section, participants will engage in practical exercises to reinforce their understanding of Tekton pipelines and GitOps. Exercises will include:
 
-== Infrastructure as Code (IaC)
+- Configuring a Tekton pipeline to build and push a container image.
+- Triggering a pipeline run based on a Git commit.
+- Troubleshooting common pipeline issues.
 
-=== Core IaC Principles
+== Summary
 
-[cols="1,3"]
-|===
-| Principle | Description
-
-| Declarative Configuration
-| Define desired infrastructure state explicitly
-
-| Version Control
-| Treat infrastructure configurations like software code
-
-| Immutability
-| Create new infrastructure instead of modifying existing
-
-| Automated Validation
-| Implement continuous validation and testing
-|===
-
-=== IaC Tools and Frameworks
-
-* Terraform
-* Ansible
-* CloudFormation
-* Custom orchestration tools
-
-== Scaling Strategies
-
-=== Horizontal Scaling
-* Dynamic node addition
-* Automatic resource allocation
-* Load distribution mechanisms
-
-=== Vertical Scaling
-* Resource allocation adjustments
-* Performance tuning
-* Capacity planning
-
-== Monitoring and Observability
-
-=== Monitoring Components
-
-[cols="1,2"]
-|===
-| Monitoring Aspect | Key Metrics
-
-| Performance
-| CPU utilization, memory consumption, network throughput
-
-| Health
-| Service availability, error rates, response times
-
-| Resource Utilization
-| Capacity planning, workload distribution
-
-| Compliance
-| Security configurations, policy adherence
-|===
-
-=== Observability Tools
-
-* Prometheus
-* Grafana
-* ELK Stack
-* Native monitoring solutions
-
-== Hands-on Exercise: Infrastructure Provisioning
-
-=== Exercise Objectives
-* Demonstrate infrastructure deployment
-* Practice IaC techniques
-* Implement scaling configuration
-
-[source,bash]
-----
-# Example infrastructure provisioning command
-{infractl} deploy --config infrastructure.yaml \
-    --scale-mode automatic \
-    --monitoring-level comprehensive
-----
-
-== Security Considerations
-
-=== Infrastructure Security Principles
-
-* Least privilege access
-* Network segmentation
-* Encryption of infrastructure configurations
-* Continuous security scanning
-
-== Best Practices
-
-. Use declarative configuration
-. Implement comprehensive monitoring
-. Design for scalability
-. Automate repetitive tasks
-. Maintain configuration version control
-
-== Recommended Tools and Frameworks
-
-* Kubernetes
-* OpenShift
-* Cloud-native deployment tools
-* Infrastructure management platforms
-
-== Knowledge Check
-
-. Describe three infrastructure deployment models
-. Explain the principles of Infrastructure as Code
-. How do you implement horizontal scaling?
-
-== Advanced Topics
-
-* Multi-cluster management
-* Hybrid cloud strategies
-* Advanced resource optimization techniques
-
-== Module Summary
-
-This module explored comprehensive infrastructure management strategies, covering:
-* Deployment models
-* Resource management
-* Infrastructure as Code
-* Monitoring and observability
-* Security considerations
-
-== Next Steps
-
-Prepare to apply infrastructure management concepts in practical scenarios in the next module.
+This module provides a comprehensive overview of Tekton pipelines and their integration with GitOps. By the end of this module, participants will have the knowledge and skills to automate their CI/CD workflows using Tekton, ensuring seamless and automated deployments.
