@@ -1,0 +1,188 @@
+= Module 3: Deploying the Todo App with GitOps
+
+[%hardbreaks]
+== Module Overview
+
+This module focuses on deploying a Todo application using GitOps principles. Participants will learn how to set up a GitOps repository, define the desired state of the application, and use Argo CD for deployment. Additionally, they will explore Gitea as an alternative Git service and perform hands-on tasks to deploy the Todo app using GitOps.
+
+== Key Learning Objectives
+
+* Understand the GitOps workflow for application deployment.
+* Learn how to set up and manage a GitOps repository.
+* Use Argo CD for real-time synchronization and health monitoring.
+* Explore Gitea as a self-hosted Git service and its integration with Argo CD.
+* Deploy a Todo app using GitOps principles and observe automated deployment processes.
+
+== Setting up the GitOps Repository
+
+=== Initializing the Git Repository
+
+Below is an example of creating a repo to be used for GitOps. Follow these steps:
+
+* Create a new repository on your preferred Git hosting service (e.g., GitHub, GitLab).
+* Clone the repository to your local machine:
+[source,bash]
+----
+git clone <repository-url>
+cd <repository-name>
+----
+* Initialize the GitOps structure by creating the following directories:
+[source,bash]
+----
+mkdir -p manifests/base manifests/overlays/production
+----
+* Add the necessary Kubernetes manifests (e.g., deployment.yaml, service.yaml) to the `manifests/base` directory.
+* Commit and push the changes to the repository:
+[source,bash]
+----
+git add .
+git commit -m "Initialize GitOps repository"
+git push origin main
+----
+
+=== GitOps-Compatible Structure
+
+Ensure your repository follows a GitOps-compatible structure. This typically includes:
+
+* A `base` directory for common configurations.
+* An `overlays` directory for environment-specific configurations (e.g., production, staging).
+* Kubernetes manifests (YAML files) defining the desired state of the application.
+
+== Defining the Desired State
+
+=== Key Resources
+
+The desired state of the Todo application in Git. Key resources include:
+
+* **Deployment:** Specifies the desired state of the application pods.
+* **Service:** Exposes the application to the network.
+* **ConfigMap/Secret:** Stores configuration data and sensitive information.
+* **Route:** to be used for comminucation into the application.
+
+=== Version Control and Traceability
+
+* Use Git branches for different environments (e.g., main for production, develop for staging).
+* Tag releases for traceability and rollback capabilities.
+* Maintain detailed commit messages to track changes.
+
+== Using Argo CD for Deployment
+
+=== Synchronizing with Argo CD
+
+When using Argo CD to synchronize the application deployment on OpenShift with the Git repository:
+
+* Install Argo CD on your OpenShift cluster.
+* Create an Argo CD application pointing to your Git repository:
+[source,bash]
+----
+argocd app create todo-app \
+   --repo <repository-url> \
+   --path manifests/overlays/production \
+   --dest-server https://kubernetes.default.svc \
+   --dest-namespace default
+----
+* Sync the application to deploy it:
+[source,bash]
+----
+argocd app sync todo-app
+----
+
+=== Real-Time Synchronization and Health Monitoring
+
+ArgoCD has  features such as:
+
+* **Real-Time Synchronization:** Automatically updates the deployment when changes are pushed to the Git repository.
+* **Health Monitoring:** Monitors the health of the application and reports any issues.
+
+=== Integration with Argo CD
+
+* **Repository Authentication:** Use Gitea tokens for authentication.
+* **Webhooks:** Configure webhooks in Gitea to trigger Argo CD synchronization.
+
+== Hands-On Task
+
+=== Deploying the Todo App
+
+*Navigate to the Gitea Project*
+
+image::https://i.imgur.com/xWIcfZq.png[20241121095820]
+
+*Access the Gita URL*
+
+image::https://i.imgur.com/geLhBZt.png[20241120132152]
+
+*Change the `app-config/cluster-config.yaml` to your repo url*
+
+TIP: Example https://gitea-gitea.apps.ocp4.example.com/yourusername/todo-demo-app-helmrepo.git
+
+image::https://i.imgur.com/HdrM1GK.png[20241121095717]
+
+*Change the `app/kustomization.yaml`  namespace to your namespace*
+
+TIP: namespace `todo-demo-app-yourusername`
+
+image::https://i.imgur.com/PKWQ2YP.png[20241121105934]
+
+*Login into the ArgoCD instance*
+
+TIP: Click on `LOG IN VIA OPENSHIFT`
+
+image::https://i.imgur.com/vv66B8w.png[20241121095839]
+
+*Use your OpenShift username and password to access cluster and Authorize Access*
+
+image::https://i.imgur.com/4tgyZp3.png[20241121095857]
+
+*Configure your Repo under Settings->Repositories*
+
+TIP: Enter the vaules below
+
+* Type `git`
+* Project `yourusername-project`
+* Repository URL `https://gitea-gitea.apps.ocp4.example.com/yourusername/todo-demo-app-helmrepo.git`
+* Username (optional) `user1`
+* Password (optional) `******`
+
+*Validate the connection was `Successful`*
+
+image::https://i.imgur.com/BeVm5pE.png[20241121095924]
+
+*Copy the configuration from your Gitea Repo into ArgoCD*
+
+image::https://i.imgur.com/HdrM1GK.png[20241121095717]
+
+*Click on the `EDIT AS YAML`*
+
+image::https://i.imgur.com/lOegQXV.png[20241121115305]
+
+*Save the yaml configuration in ArgoCD*
+
+image::https://i.imgur.com/03yoddA.png[20241121100106]
+
+*Click Create to start deployment*
+
+image::https://i.imgur.com/fjOQ7hl.png[20241121100117]
+
+*Validate ArgoCD Sync status*
+
+image::https://i.imgur.com/SORX1Nm.png[20241121105811]
+
+*Navigate to your todo-demo-app-yourusername namespace and select route*
+
+image::https://i.imgur.com/JhoRVaw.png[20241121105841]
+
+*View deployed application*
+
+image::https://i.imgur.com/UUZP74r.png[20241121105910]
+
+
+== Module Summary
+
+Key takeaways from this module include:
+
+* Understanding the GitOps workflow for application deployment.
+* Setting up and managing a GitOps repository.
+* Using Argo CD for real-time synchronization and health monitoring.
+* Exploring Gitea as a self-hosted Git service and its integration with Argo CD.
+* Deploying a Todo app using GitOps principles and observing automated deployment processes.
+

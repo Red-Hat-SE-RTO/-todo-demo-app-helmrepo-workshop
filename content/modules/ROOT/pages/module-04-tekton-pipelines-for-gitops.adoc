@@ -1,4 +1,4 @@
-= Module 3: Tekton Pipelines for GitOps
+= Module 4: Tekton Pipelines for GitOps
 
 [%hardbreaks]
 == Module Overview
@@ -52,6 +52,21 @@ In this section, participants will engage in practical exercises to reinforce th
 - Configuring a Tekton pipeline to build and push a container image.
 - Triggering a pipeline run based on a Git commit.
 - Troubleshooting common pipeline issues.
+
+=== Login to OpenShift Cluster
+
+*Ensure you are logged in to your OpenShift cluster using the appropriate credentials.*
+
+* Username: {additional_user}
+
+[source,bash]
+----
+oc login -u <username> -p <password> <cluster-url>
+----
+
+
+
+Login to ArgoCD
 
 == Summary
 
