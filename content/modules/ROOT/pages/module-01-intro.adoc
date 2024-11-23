@@ -1,9 +1,5 @@
 == Workshop Title: GitOps-Driven CI/CD on OpenShift with Tekton Pipelines and Quay
 
-== Target Audience: Developers and DevOps engineers with some Kubernetes experience, interested in implementing GitOps principles for CI/CD on OpenShift.
-
-== Workshop Outline:
-
 === 1. Introduction to Tekton, GitOps, and OpenShift
 
 ==== What is GitOps?
