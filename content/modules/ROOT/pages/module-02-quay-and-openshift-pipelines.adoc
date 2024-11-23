@@ -113,9 +113,9 @@ image::https://i.imgur.com/5We8Sua.png[20241120133355]
 
 *Add Permissions to the created account* 
 
-image::(https://i.imgur.com/KdlqZx3.png)[20241120133453]
+image::https://i.imgur.com/KdlqZx3.png[20241120133453]
 
-image::(https://i.imgur.com/v1ba4RE.png)[20241120133542]
+image::https://i.imgur.com/v1ba4RE.png[20241120133542]
 
 *Collect Credentials 
 
@@ -129,7 +129,7 @@ TIP:  Click on Kubernetes Secret -> View  yourusername+todo_demo_app_yourusernam
 
 image::https://i.imgur.com/2k9ORSd.png[20241120134031]
 
-*Copy secret into OpenShift with the name container-registry-secret*
+*Copy secret into OpenShift with the name container-registry-secret-yourusername*
 
 TIP: Use the + icon in the top right corner of the OpenShift console to quickly add YAML. Make sure you are in the todo-demo-app-yourusername!
 
@@ -155,4 +155,4 @@ In this module, we explored the integration of Quay as a container registry with
 
 == Next Steps
 
-Proceed to the next module to apply these concepts in practical scenarios and explore advanced CI/CD techniques.
+Proceed to the next module to apply these concepts in practical scenarios and deploy the Todo App with GitOps.
