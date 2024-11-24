@@ -121,6 +121,8 @@ image::https://i.imgur.com/HdrM1GK.png[20241121095717]
 
 TIP: namespace `todo-demo-app-yourusername`
 
+TIP: spec->destination->namespace `todo-demo-app-yourusername`
+
 image::https://i.imgur.com/PKWQ2YP.png[20241121105934]
 
 *Login into the ArgoCD instance*
