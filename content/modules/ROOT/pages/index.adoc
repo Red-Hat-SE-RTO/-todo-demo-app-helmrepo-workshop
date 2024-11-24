@@ -30,7 +30,7 @@ This workshop is tailored for:
   * **Kustomize:** A tool for customizing Kubernetes resource files and managing simple deployments.
   * **Helm:** A package manager for Kubernetes that uses templating to deploy complex applications.
 
-=== 2. Quay and OpenShift Pipelines**
+=== 2. Quay and OpenShift Pipelines
 
 *   **Introduction to Quay:** Red Hat Quay is a robust container registry that stores, builds, and deploys container images. In the CI/CD pipeline, Quay serves as a central repository for container images, facilitating efficient storage, versioning, and distribution. It also offers features like image vulnerability scanning and mirroring, enhancing security and reliability in the development workflow. 
 
