@@ -1,176 +1,81 @@
-= Module 6: Advanced Tekton Techniques (Optional)
+# Module 6: Advanced Tekton Techniques (Optional)
 
-[%hardbreaks]
-== Progressive Delivery with Tekton
+## Progressive Delivery with Tekton
 
-=== Introduction
+### Introduction
 
 Progressive delivery is a strategy that allows for the gradual rollout of new software versions, reducing the risk of deployment failures. Tekton, combined with Kubernetes features, can facilitate canary and blue/green deployments.
 
-=== Canary Deployments
+**Learn more about Progressive Delivery**
+
+- https://argo-rollouts.readthedocs.io/en/stable/[Argo CD Progressive Delivery]
+
+### Canary Deployments
 
 A canary deployment involves rolling out a new version of an application to a small subset of users before fully deploying it. This allows for testing the new version in a live environment with real user traffic.
 
-==== Tekton Implementation
+**Canary Deployments in OpenShift**
 
-- Create a Tekton pipeline that deploys the new version of the Todo app to a small percentage of pods.
+- https://developers.redhat.com/articles/2024/03/26/canary-deployment-strategy-openshift-service-mesh[Canary deployment strategy with OpenShift Service Mesh]
+
+#### Tekton Implementation
+
+- Create a Tekton pipeline that deploys the new version of the application to a small percentage of pods.
 - Use Kubernetes features like `PodDisruptionBudgets` and `HorizontalPodAutoscaler` to manage the rollout.
 - Monitor key metrics (e.g., response time, error rate) and gradually increase the percentage of traffic to the new version based on performance.
 
-=== Blue/Green Deployments
+**Tekton Documentation**
+
+- https://tekton.dev/docs/pipelines/resources/[Pipeline Resources]
+
+**Kubernetes Documentation**
+
+- https://kubernetes.io/docs/concepts/workloads/pods/disruptions/[Pod Disruptions]
+
+### Blue/Green Deployments
 
 A blue/green deployment involves running two identical production environments (blue and green) simultaneously. The new version is deployed to the inactive environment (green), tested, and then switched to become the active environment.
 
-==== Tekton Implementation
+**Argo CD Blue/Green Deployment Guide**
 
-- Create a Tekton pipeline that deploys the new version of the Todo app to the green environment.
+- https://argo-cd.readthedocs.io/en/stable/user-guide/blue_green/[Argo CD Blue/Green Deployment]
+
+#### Tekton Implementation
+
+- Create a Tekton pipeline that deploys the new version of the application to the green environment.
 - Use Kubernetes services to switch traffic from the blue environment to the green environment once the new version is verified.
 - Ensure that the old version (blue) can be quickly rolled back if issues arise.
 
-== Multi-Environment Deployments
+**Tekton Documentation**
 
-=== Introduction
+- https://tekton.dev/docs/pipelines/pipelines/#specifying-pipelineservices[Specifying Pipeline Services]
+
+## Multi-Environment Deployments
+
+### Introduction
 
 Managing deployments across multiple environments (e.g., development, staging, production) requires dynamic configuration and environment-specific settings.
 
-=== PipelineParameters and Workspaces
+**Multi-Environment Deployments**
 
-==== PipelineParameters
+- https://www.redhat.com/en/blog/multi-cluster-deployment-kubernetes-gitops[How to deploy multicluster applications with OpenShift and GitOps]
+
+### Pipeline Parameters and Workspaces
+
+#### Pipeline Parameters
 
 - Use `PipelineParameters` to pass environment-specific configurations to the pipeline.
 - Example: Define parameters for different environments (e.g., `env=dev`, `env=staging`, `env=prod`).
 
-==== Workspaces
+**Tekton Documentation**
+
+- https://tekton.dev/docs/pipelines/pipelines/#specifying-parameters[Specifying Parameters]
+
+#### Workspaces
 
 - Use `Workspaces` to share data between tasks in the pipeline.
 - Example: Store environment-specific configuration files in a workspace and use them in different tasks.
 
-=== Dynamic Configuration
+**Tekton Documentation**
 
-==== Environment Variables
-
-- Use environment variables to dynamically configure the pipeline based on the target environment.
-- Example: Set environment variables in the pipeline definition or pass them via the `tkn` CLI.
-
-==== External Configuration Files
-
-- Store environment-specific configuration files in a Git repository and fetch them during pipeline execution.
-- Example: Use a custom task to clone the configuration repository and apply the appropriate configuration files.
-
-=== Tekton Resources
-
-==== PipelineResources
-
-- Use `PipelineResources` to fetch environment-specific secrets and configurations.
-- Example: Define a `PipelineResource` for each environment and use it in the pipeline tasks.
-
-==== Custom Tasks
-
-- Create custom tasks to handle environment-specific logic, such as fetching secrets from a secure vault.
-- Example: A custom task that retrieves environment-specific secrets from HashiCorp Vault.
-
-== Observability and Monitoring in Tekton
-
-=== Best Practices
-
-==== Logging
-
-- Use `kubectl` and `tkn` to track `PipelineRun` and `TaskRun` logs.
-- Example: `kubectl logs -f <pod-name>` or `tkn taskrun logs <taskrun-name>`.
-
-==== Monitoring
-
-- Integrate Tekton with observability tools like Prometheus, Grafana, or Jaeger for tracing pipeline executions.
-- Example: Deploy Prometheus and Grafana in the cluster and configure them to scrape Tekton metrics.
-
-=== Demonstrations
-
-==== Capture Metrics
-
-- Use Prometheus to capture pipeline metrics such as task durations, failure rates, and resource usage.
-- Example: Create a Prometheus job to scrape Tekton metrics and visualize them in Grafana.
-
-==== Visualize Executions
-
-- Use the Tekton Dashboard or third-party tools to visualize pipeline executions.
-- Example: Deploy the Tekton Dashboard and configure it to display pipeline runs and task statuses.
-
-==== Set Up Alerts
-
-- Configure alerts for failed pipeline runs or prolonged execution times.
-- Example: Use Prometheus Alertmanager to send notifications when a pipeline fails or takes longer than expected.
-
-== Advanced Troubleshooting in Tekton Pipelines
-
-=== Common Challenges
-
-==== Authentication Issues
-
-- Troubleshoot failures related to private Git repositories or container registries.
-- Example: Ensure that the pipeline has the necessary credentials to access private repositories.
-
-==== Resource Quotas
-
-- Identify and resolve quota-related issues in Kubernetes clusters.
-- Example: Use `kubectl describe` to check resource quotas and adjust them as needed.
-
-==== Pipeline Failures
-
-- Debug complex pipelines using task-level logs and `tkn` CLI.
-- Example: Use `tkn taskrun logs <taskrun-name>` to view detailed logs for a failed task.
-
-=== Hands-On Debugging
-
-==== Simulate Failures
-
-- Simulate a pipeline failure caused by misconfigured `TaskRun` parameters or missing secrets.
-- Example: Modify a task parameter to an incorrect value and observe the failure.
-
-==== Retry Mechanisms
-
-- Use Tekton's built-in retry mechanisms and conditional execution to handle errors gracefully.
-- Example: Configure a task to retry on failure and use conditions to skip tasks based on previous results.
-
-==== Sidecar Containers
-
-- Utilize sidecar containers for advanced debugging, such as capturing additional logs or running diagnostic tools.
-- Example: Add a sidecar container to a task that runs a diagnostic tool and captures logs.
-
-== Custom Tekton Tasks and Reusable Pipelines
-
-=== Creating Custom Tasks
-
-- Guide participants on creating custom Tekton tasks for specialized workflows.
-- Example: Create a custom task that runs a security scan on the application code.
-
-=== Reusable Pipelines
-
-- Introduce reusable pipeline patterns using Tekton’s Catalog and how to contribute custom tasks to the community.
-- Example: Create a reusable pipeline template for deploying and testing applications.
-
-=== Demonstration
-
-- Demonstrate creating a reusable pipeline template for deploying and testing applications.
-- Example: Create a pipeline that fetches the application code, builds the image, runs tests, and deploys the application.
-
-== Hands-On Tasks
-
-=== Multi-Environment Deployment
-
-- Create a multi-environment deployment pipeline for the Todo app.
-- Example: Configure a pipeline that deploys the Todo app to development, staging, and production environments.
-
-=== Progressive Delivery
-
-- Configure progressive delivery in Tekton pipelines.
-- Example: Create a pipeline that deploys a new version of the Todo app in stages, verifies metrics, and gradually rolls out to production.
-
-=== Debugging
-
-- Debug a pre-configured failed pipeline to identify and resolve errors.
-- Example: Simulate a pipeline failure and use task-level logs and `tkn` CLI to debug and resolve the issue.
-
-=== Observability Integration
-
-- Integrate Tekton with Prometheus and Grafana for real-time monitoring and observability.
-- Example: Deploy Prometheus and Grafana, configure them to scrape Tekton metrics, and visualize pipeline executions.
+- https://tekton.dev/docs/pipelines/pipelines/#specifying-workspaces[Specifying Workspaces]
