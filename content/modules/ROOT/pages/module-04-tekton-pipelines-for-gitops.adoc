@@ -64,10 +64,386 @@ In this section, participants will engage in practical exercises to reinforce th
 oc login -u <username> -p <password> <cluster-url>
 ----
 
+== Tekton Pipeline Documentation
+
+image::https://i.imgur.com/I0DeIgW.png[20241121124441]
+
+image::https://i.imgur.com/3ffuu0l.png[20241123191017]
+
+=== Overview
+
+The Tekton Pipeline named `argocd-quay-todo-demo-app-pipeline-yourusername`. The pipeline is designed to automate the build, test, and deployment of a Java application using Git, Maven, Buildah, and Argo CD. The pipeline is configured to run in the `todo-demo-app-yourusername` namespace.
+
+https://github.com/tosin2013/todo-demo-app-helmrepo/blob/main/openshift-pipelines/quay-deploy-pipeline.yaml[Reference]
+
+=== Prerequisites
+
+- Kubernetes cluster with Tekton installed.
+- OpenShift cluster with the `image-registry` service.
+- Quay.io repository for storing Docker images.
+- Gitea repository for storing the application code and Helm charts.
+- Argo CD installed and configured.
+- Maven settings configured in the `maven-settings-yourusername` workspace.
+
+=== Pipeline Parameters
+
+The pipeline accepts the following parameters:
+
+- `IMAGE_TAG` (default: `latest`): The tag value for the Docker image.
+- `CURRENT_IMAGE_TAG` (default: `CHANGEME`): The current image tag value.
+- `quay-io-repository` (default: `quay.io/takinosh/todo-demo-app:v1`): The Quay.io repository URL.
+- `quay-io-image-tag-name` (default: `latest`): The tag name for the image in the Quay.io repository.
+- `GIT_REPOSITORY` (default: `gitea-gitea.apps.cluster-2wcqt.2wcqt.sandbox80.opentlc.com/yourusername/todo-demo-app-helmrepo`): The URL of the Git repository.
+- `GIT_EMAIL` (default: `pipeline@example.com`): The email address used for Git commits.
+- `GIT_NAME` (default: `todo-demo-app`): The name used for Git commits.
+- `REPLICA_COUNT` (default: `1`): The number of replicas for the application.
+- `GIT_USERNAME`: The username for accessing the Git repository.
+- `GIT_TOKEN`: The token for accessing the Git repository.
+
+=== Pipeline Tasks
+
+== 1. Fetch Repository (`fetch-repository`)
+
+- **Task Reference**: `git-clone` (ClusterTask)
+- **Description**: Clones the Git repository containing the application code.
+- **Parameters**:
+  - `url`: The URL of the Git repository.
+  - `revision`: The branch or tag to be checked out.
+  - `subdirectory`: The subdirectory to clone (if any).
+  - `deleteExisting`: Whether to delete the existing directory before cloning.
+- **Workspaces**:
+  - `output` (workspace: `shared-workspace-yourusername`): The workspace where the cloned repository will be stored.
+
+== 2. Maven Run (`maven-run`)
+
+- **Task Reference**: `maven` (ClusterTask)
+- **Description**: Runs Maven to build the Java application.
+- **Parameters**:
+  - `CONTEXT_DIR`: The directory containing the Maven project.
+  - `GOALS`: The Maven goals to be executed.
+- **Run After**: `fetch-repository`
+- **Workspaces**:
+  - `maven-settings` (workspace: `maven-settings-yourusername`): The workspace containing the Maven settings.
+  - `source` (workspace: `shared-workspace-yourusername`): The workspace containing the cloned repository.
+
+== 3. Build Java App Image (`build-java-app-image`)
+
+- **Task Reference**: `buildah` (ClusterTask)
+- **Description**: Builds a Docker image for the Java application using Buildah.
+- **Parameters**:
+  - `CONTEXT`: The build context directory.
+  - `DOCKERFILE`: The path to the Dockerfile.
+  - `IMAGE`: The name and tag of the image to be built.
+  - `TLSVERIFY`: Whether to verify TLS certificates.
+- **Run After**: `maven-run`
+- **Workspaces**:
+  - `source` (workspace: `shared-workspace-yourusername`): The workspace containing the application code.
+
+== 4. Tag Test Image (`tag-test-image`)
+
+- **Task Reference**: `openshift-client` (ClusterTask)
+- **Description**: Tags the built image for testing.
+- **Parameters**:
+  - `SCRIPT`: The OpenShift command to tag the image.
+- **Run After**: `build-java-app-image`
+- **Workspaces**: None
+
+== 5. Push Todo Demo App Image to Quay (`push-todo-demo-app-image-to-quay-yourusername`)
+
+- **Task Reference**: `push-todo-demo-app-image-to-quay-yourusername` (Task)
+- **Description**: Pushes the Docker image to the Quay.io repository.
+- **Parameters**:
+  - `quay-io-repository`: The Quay.io repository URL.
+  - `quay-io-image-tag-name`: The tag name for the image in the Quay.io repository.
+- **Run After**: `tag-test-image`
+- **Workspaces**:
+  - `source` (workspace: `shared-workspace-yourusername`): The workspace containing the application code.
+
+=== 6. Update Image Tag in Git (`update-image-tag-in-git`)
+
+- **Task Reference**: `update-image-tag-in-git` (Task)
+- **Description**: Updates the image tag in the Git repository and commits the changes.
+- **Parameters**:
+  - `GIT_REPOSITORY`: The URL of the Git repository.
+  - `GIT_EMAIL`: The email address used for Git commits.
+  - `GIT_NAME`: The name used for Git commits.
+  - `GIT_MANIFEST_DIR`: The directory containing the Helm charts.
+  - `TARGET_IMAGE`: The target image URL.
+  - `TARGET_TAG`: The target image tag.
+  - `REPLICA_COUNT`: The number of replicas for the application.
+  - `GIT_USERNAME`: The username for accessing the Git repository.
+  - `GIT_TOKEN`: The token for accessing the Git repository.
+- **Run After**: `push-todo-demo-app-image-to-quay-yourusername`
+- **Workspaces**:
+  - `source` (workspace: `helm-shared-workspace-yourusername`): The workspace containing the Helm charts.
+
+=== 7. Argo CD Task Sync and Wait (`argocd-task-sync-and-wait`)
+
+- **Task Reference**: `argocd-task-sync-and-wait` (ClusterTask)
+- **Description**: Syncs the application in Argo CD and waits for the sync to complete.
+- **Parameters**:
+  - `application-name`: The name of the Argo CD application.
+  - `revision`: The revision to be synced.
+- **Run After**: `update-image-tag-in-git`
+- **Workspaces**: None
+
+=== Workspaces
+
+- `shared-workspace-yourusername`: Shared workspace for the application code and build artifacts.
+- `maven-settings-yourusername`: Workspace containing the Maven settings.
+- `helm-shared-workspace-yourusername`: Workspace containing the Helm charts.
+
+=== Additional Resources
+
+- https://tekton.dev/docs/[Tekton Documentation]
+- https://hub.tekton.dev/tekton/task/git-clone[Git Clone Task]
+- https://hub.tekton.dev/tekton/task/maven[Maven Task]
+- https://hub.tekton.dev/tekton/task/buildah[Buildah Task]
+- https://hub.tekton.dev/tekton/task/openshift-client[OpenShift Client Task]
+- https://hub.tekton.dev/tekton/task/argocd-task-sync-and-wait[Argo CD Task Sync and Wait]
+
+== Tekton Task Documentation: `push-todo-demo-app-image-to-quay-yourusername`
+
+=== Overview
+
+The Tekton Task named `push-todo-demo-app-image-to-quay-yourusername`. The task is designed to pull, tag, and push a Docker image to a Quay.io repository. This task is typically used in a pipeline to ensure that the built image is available in a remote repository for further deployment steps.
+
+https://github.com/tosin2013/todo-demo-app-helmrepo/blob/main/openshift-pipelines/pushImageToQuay.yaml[Reference]
+
+image::https://i.imgur.com/uzU61Dq.png[20241123190136]
+
+image::https://i.imgur.com/hRgxkwm.png[20241123191114]
+
+=== Prerequisites
+
+- Kubernetes cluster with Tekton installed.
+- OpenShift cluster with the `image-registry` service.
+- Quay.io repository for storing Docker images.
+- A secret named `container-registry-secret-yourusername` containing the Docker configuration for accessing the Quay.io repository.
+- A workspace named `helm-shared-workspace-yourusername` for shared storage.
+
+=== Task Parameters
+
+The task accepts the following parameters:
+
+- `quay-io-repository` (default: `quay.io/takinosh/todo-demo-app`): The Quay.io repository URL where the image will be stored.
+- `quay-io-image-tag-name` (default: `latest`): The tag to use to identify the image.
+- `STORAGE_DRIVER` (default: `overlay`): The Buildah storage driver to use.
+
+=== Task Steps
+
+=== 1. Pull Image (`podman-pull-image`)
+
+- **Image**: `registry.redhat.io/rhel9/podman:9.5-1730554132`
+- **Script**:
+  ```sh
+  #!/bin/sh
+  podman pull --tls-verify=false \
+    docker://image-registry.openshift-image-registry.svc:5000/todo-demo-app-yourusername/todo-demo-app-yourusername-image:$(params.quay-io-image-tag-name)
+  ```
+- **Description**: Pulls the Docker image from the OpenShift image registry.
+- **Security Context**: Privileged mode is enabled.
+- **Volume Mounts**:
+  - `mountPath: /var/lib/containers`
+  - `name: varlibcontainers`
+
+== 2. Tag Image (`buildah-tag-image`)
+
+- **Image**: `registry.redhat.io/rhel9/buildah:9.5`
+- **Script**:
+  ```sh
+  #!/bin/sh
+  buildah --storage-driver=$(params.STORAGE_DRIVER) tag \
+    image-registry.openshift-image-registry.svc:5000/todo-demo-app-yourusername/todo-demo-app-yourusername-image:$(params.quay-io-image-tag-name) \
+    $(params.quay-io-repository):$(params.quay-io-image-tag-name)
+  ```
+- **Description**: Tags the pulled image with the specified Quay.io repository and tag.
+- **Security Context**: Privileged mode is enabled.
+- **Volume Mounts**:
+  - `mountPath: /var/lib/containers`
+  - `name: varlibcontainers`
+
+== 3. List Images After Tagging (`buildah-list-images-after-tagging`)
+
+- **Image**: `registry.redhat.io/rhel9/buildah:9.5`
+- **Script**:
+  ```sh
+  #!/bin/sh
+  buildah --storage-driver=$(params.STORAGE_DRIVER) images
+  ```
+- **Description**: Lists all images currently available in the Buildah storage to verify the tagging.
+- **Security Context**: Privileged mode is enabled.
+- **Volume Mounts**:
+  - `mountPath: /var/lib/containers`
+  - `name: varlibcontainers`
+
+== 4. Push Image to Quay.io (`push-todo-demo-app-image-to-quay-yourusername`)
+
+- **Image**: `registry.redhat.io/rhel9/buildah:9.5`
+- **Script**:
+  ```sh
+  #!/bin/sh
+  ls -lath /etc/secret-volume/.dockerconfigjson || exit 1
+  buildah --storage-driver=$(params.STORAGE_DRIVER) push --tls-verify=false \
+    --authfile /etc/secret-volume/.dockerconfigjson \
+    $(params.quay-io-repository):$(params.quay-io-image-tag-name)
+  ```
+- **Description**: Pushes the tagged image to the Quay.io repository using the provided Docker configuration file.
+- **Security Context**: Privileged mode is enabled.
+- **Volume Mounts**:
+  - `mountPath: /etc/secret-volume`
+    - `name: secret-volume`
+    - `readOnly: true`
+  - `mountPath: /var/lib/containers`
+    - `name: varlibcontainers`
+
+=== Volumes
+
+- `varlibcontainers`:
+  - **Type**: `emptyDir`
+  - **Description**: Temporary storage for Buildah and Podman operations.
+- `secret-volume`:
+  - **Type**: `secret`
+  - **Secret Name**: `container-registry-secret-yourusername`
+  - **Description**: Contains the Docker configuration for accessing the Quay.io repository.
+
+=== Workspaces
+
+- `helm-shared-workspace-yourusername`:
+  - **Description**: Workspace for shared storage, typically used for Helm charts or other shared files.
+
+=== Additional Resources
+
+- https://tekton.dev/docs/[Tekton Documentation]
+- https://podman.io/docs[Podman Documentation]
+- https://buildah.io/docs[Buildah Documentation]
+- https://docs.quay.io/[Quay.io Documentation]
+- https://kubernetes.io/docs/concepts/configuration/secret/[Kubernetes Secrets]
 
 
-Login to ArgoCD
+== Start the Tekton Pipeline 
 
-== Summary
+=== Using the GUI 
 
-This module provides a comprehensive overview of Tekton pipelines and their integration with GitOps. By the end of this module, participants will have the knowledge and skills to automate their CI/CD workflows using Tekton, ensuring seamless and automated deployments.
+*Under Pipelines -> Pipelines*
+
+*Update the Parameters in the UI*
+
+- IMAGE_TAG="v0.0.1"
+- CURRENT_IMAGE_TAG="v1"
+- QUAY_IO_REPOSITORY="yourquayroute/yourusername/todo-demo-app-yourusername"
+- QUAY_IO_IMAGE_TAG_NAME="v0.0.1"
+- GIT_REPOSITORY="yourgitearoute/yourusername/todo-demo-app-helmrepo"
+- GIT_EMAIL="pipeline@example.com"
+- GIT_NAME="todo-demo-app"
+- REPLICA_COUNT="1"
+- GIT_USERNAME="yourusername"
+- GIT_TOKEN="password"
+- SHARED_WORKSPACE="shared-workspace-pvc-yourusername"
+- MAVEN_SETTINGS_WORKSPACE="maven-settings-pvc-yourusername"
+- HELM_SHARED_WORKSPACE="helm-workspace-pvc-yourusername"
+- SECRET_VOLUME="container-registry-secret-yourusername"
+
+TIP: Click on `start` to start pipeline 
+
+image::https://i.imgur.com/mkKpvT2.png[20241123211114]
+
+image::https://i.imgur.com/sAuoVpv.png[20241123211251]
+
+
+=== Using the CLI
+
+=== Prerequisites
+
+- Open the `OpenShift command line terminal`
+
+image::https://i.imgur.com/NAncCUB.png[20241124083024]
+
+- Start the terminal 
+
+image::https://i.imgur.com/FSGoddR.png[20241124083117]
+
+- Collect Variables
+
+[source,bash]
+----
+export USERNAME=yourusername
+export QUAY_ROUTE=$(oc get route -n quay-registry | grep quay-registry-quay-quay-registry | awk '{print $2}')
+export GITEA_ROUTE=$(oc get route -n gitea | grep gitea | awk '{print $2}')
+----
+
+==== 1. **Set Up Environment Variables**
+   - **Objective**: Define the parameters and workspaces required for the pipeline.
+   - **Actions**:
+
+[source,bash]
+----
+# Parameters
+export IMAGE_TAG="v0.0.2"
+export CURRENT_IMAGE_TAG="v1"
+export QUAY_IO_REPOSITORY="${QUAY_ROUTE}/${USERNAME}/todo-demo-app-${USERNAME}"
+export QUAY_IO_IMAGE_TAG_NAME="v0.0.2"
+export GIT_REPOSITORY="${GITEA_ROUTE}/${USERNAME}/todo-demo-app-helmrepo"
+export GIT_EMAIL="pipeline@example.com"
+export GIT_NAME="todo-demo-app"
+export REPLICA_COUNT="1"
+export GIT_USERNAME="${USERNAME}"
+export GIT_TOKEN="password"
+----
+   - **Explanation**: These variables store the necessary configuration and credentials for the pipeline. They include image tags, repository URLs, and Git credentials.
+
+==== 2. **Set Up Workspaces**
+   - **Objective**: Define the persistent volumes and secrets that will be used by the pipeline.
+   - **Actions**:
+
+[source,bash]
+----
+# Workspaces
+export SHARED_WORKSPACE="shared-workspace-pvc-${USERNAME}"
+export MAVEN_SETTINGS_WORKSPACE="maven-settings-pvc-${USERNAME}"
+export HELM_SHARED_WORKSPACE="helm-workspace-pvc-${USERNAME}"
+export SECRET_VOLUME="container-registry-secret-${USERNAME}"
+----
+   - **Explanation**: These variables define the workspaces that will be mounted in the pipeline. Workspaces are used to persist data between pipeline runs and to provide necessary configurations.
+
+==== 3. **Start the Pipeline**
+   - **Objective**: Start the Tekton pipeline with the defined parameters and workspaces.
+   - **Actions**:
+
+[source,bash]
+----
+tkn pipeline start argocd-quay-todo-demo-app-pipeline-${USERNAME} \
+  --param IMAGE_TAG="${IMAGE_TAG}" \
+  --param CURRENT_IMAGE_TAG="${CURRENT_IMAGE_TAG}" \
+  --param quay-io-repository="${QUAY_IO_REPOSITORY}" \
+  --param quay-io-image-tag-name="${QUAY_IO_IMAGE_TAG_NAME}" \
+  --param GIT_REPOSITORY="${GIT_REPOSITORY}" \
+  --param GIT_EMAIL="${GIT_EMAIL}" \
+  --param GIT_NAME="${GIT_NAME}" \
+  --param REPLICA_COUNT="${REPLICA_COUNT}" \
+  --param GIT_USERNAME="${GIT_USERNAME}" \
+  --param GIT_TOKEN="${GIT_TOKEN}" \
+  --workspace name=shared-workspace-${USERNAME},claimName="${SHARED_WORKSPACE}" \
+  --workspace name=maven-settings-${USERNAME},claimName="${MAVEN_SETTINGS_WORKSPACE}" \
+  --workspace name=helm-shared-workspace-${USERNAME},claimName="${HELM_SHARED_WORKSPACE}" \
+  --workspace name=secret-volume,secret="${SECRET_VOLUME}" \
+  --showlog
+----
+
+image::https://i.imgur.com/DQ09Lma.png[20241124084718]
+
+*Press `y` to install tekton cli*
+
+image::https://i.imgur.com/uz7iOpc.jpeg[20241124094352]
+
+   - **Explanation**:
+     - `tkn pipeline start` is the command to start a Tekton pipeline.
+     - `argocd-quay-todo-demo-app-pipeline-yourusername` is the name of the pipeline to be started.
+     - `--param` flags are used to pass the parameters defined earlier to the pipeline.
+     - `--workspace` flags are used to mount the workspaces defined earlier.
+     - `--showlog` flag ensures that the pipeline logs are displayed in the terminal.
+
+== The pipeline will fail but we will fix it in the next section
+
+image::https://i.imgur.com/HKkl3mW.png[20241124081958]
+
