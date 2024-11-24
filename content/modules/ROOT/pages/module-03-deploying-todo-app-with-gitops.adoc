@@ -127,6 +127,8 @@ image::https://i.imgur.com/PKWQ2YP.png[20241121105934]
 
 *Login into the ArgoCD instance*
 
+*Located under openshift-gitops -> Routes Menu Click on `openshift-gitops-server` Location*
+
 TIP: Click on `LOG IN VIA OPENSHIFT`
 
 image::https://i.imgur.com/vv66B8w.png[20241121095839]
