@@ -184,18 +184,18 @@ TIP: Change the IMAGE_TAG and QUAY_IO_IMAGE_TAG_NAME so there is a change
 [source,bash]
 ----
 export USERNAME=yourusername
+export IMAGE_TAG="v0.0.3" 
+export QUAY_IO_IMAGE_TAG_NAME="v0.0.3"
+export CURRENT_IMAGE_TAG="v1"
+export GIT_TOKEN="password"
 export QUAY_ROUTE=$(oc get route -n quay-registry | grep quay-registry-quay-quay-registry | awk '{print $2}')
 export GITEA_ROUTE=$(oc get route -n gitea | grep gitea | awk '{print $2}')
-export IMAGE_TAG="v0.0.3" 
-export CURRENT_IMAGE_TAG="v1"
 export QUAY_IO_REPOSITORY="${QUAY_ROUTE}/${USERNAME}/todo-demo-app-${USERNAME}"
-export QUAY_IO_IMAGE_TAG_NAME="v0.0.3"
 export GIT_REPOSITORY="${GITEA_ROUTE}/${USERNAME}/todo-demo-app-helmrepo"
 export GIT_EMAIL="pipeline@example.com"
 export GIT_NAME="todo-demo-app"
 export REPLICA_COUNT="1"
 export GIT_USERNAME="${USERNAME}"
-export GIT_TOKEN="password"
 export SHARED_WORKSPACE="shared-workspace-pvc-${USERNAME}"
 export MAVEN_SETTINGS_WORKSPACE="maven-settings-pvc-${USERNAME}"
 export HELM_SHARED_WORKSPACE="helm-workspace-pvc-${USERNAME}"
