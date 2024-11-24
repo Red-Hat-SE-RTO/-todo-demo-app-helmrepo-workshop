@@ -1,8 +1,8 @@
-# Module 6: Advanced Tekton Techniques (Optional)
+== Module 6: Advanced Tekton Techniques (Optional)
 
-## Progressive Delivery with Tekton
+=== Progressive Delivery with Tekton
 
-### Introduction
+==== Introduction
 
 Progressive delivery is a strategy that allows for the gradual rollout of new software versions, reducing the risk of deployment failures. Tekton, combined with Kubernetes features, can facilitate canary and blue/green deployments.
 
@@ -10,7 +10,7 @@ Progressive delivery is a strategy that allows for the gradual rollout of new so
 
 - https://argo-rollouts.readthedocs.io/en/stable/[Argo CD Progressive Delivery]
 
-### Canary Deployments
+==== Canary Deployments
 
 A canary deployment involves rolling out a new version of an application to a small subset of users before fully deploying it. This allows for testing the new version in a live environment with real user traffic.
 
@@ -18,7 +18,7 @@ A canary deployment involves rolling out a new version of an application to a sm
 
 - https://developers.redhat.com/articles/2024/03/26/canary-deployment-strategy-openshift-service-mesh[Canary deployment strategy with OpenShift Service Mesh]
 
-#### Tekton Implementation
+===== Tekton Implementation
 
 - Create a Tekton pipeline that deploys the new version of the application to a small percentage of pods.
 - Use Kubernetes features like `PodDisruptionBudgets` and `HorizontalPodAutoscaler` to manage the rollout.
@@ -32,7 +32,7 @@ A canary deployment involves rolling out a new version of an application to a sm
 
 - https://kubernetes.io/docs/concepts/workloads/pods/disruptions/[Pod Disruptions]
 
-### Blue/Green Deployments
+==== Blue/Green Deployments
 
 A blue/green deployment involves running two identical production environments (blue and green) simultaneously. The new version is deployed to the inactive environment (green), tested, and then switched to become the active environment.
 
@@ -40,7 +40,7 @@ A blue/green deployment involves running two identical production environments (
 
 - https://argo-cd.readthedocs.io/en/stable/user-guide/blue_green/[Argo CD Blue/Green Deployment]
 
-#### Tekton Implementation
+===== Tekton Implementation
 
 - Create a Tekton pipeline that deploys the new version of the application to the green environment.
 - Use Kubernetes services to switch traffic from the blue environment to the green environment once the new version is verified.
@@ -50,9 +50,9 @@ A blue/green deployment involves running two identical production environments (
 
 - https://tekton.dev/docs/pipelines/pipelines/#specifying-pipelineservices[Specifying Pipeline Services]
 
-## Multi-Environment Deployments
+=== Multi-Environment Deployments
 
-### Introduction
+==== Introduction
 
 Managing deployments across multiple environments (e.g., development, staging, production) requires dynamic configuration and environment-specific settings.
 
@@ -60,9 +60,9 @@ Managing deployments across multiple environments (e.g., development, staging, p
 
 - https://www.redhat.com/en/blog/multi-cluster-deployment-kubernetes-gitops[How to deploy multicluster applications with OpenShift and GitOps]
 
-### Pipeline Parameters and Workspaces
+==== Pipeline Parameters and Workspaces
 
-#### Pipeline Parameters
+===== Pipeline Parameters
 
 - Use `PipelineParameters` to pass environment-specific configurations to the pipeline.
 - Example: Define parameters for different environments (e.g., `env=dev`, `env=staging`, `env=prod`).
@@ -71,7 +71,7 @@ Managing deployments across multiple environments (e.g., development, staging, p
 
 - https://tekton.dev/docs/pipelines/pipelines/#specifying-parameters[Specifying Parameters]
 
-#### Workspaces
+===== Workspaces
 
 - Use `Workspaces` to share data between tasks in the pipeline.
 - Example: Store environment-specific configuration files in a workspace and use them in different tasks.
@@ -79,3 +79,33 @@ Managing deployments across multiple environments (e.g., development, staging, p
 **Tekton Documentation**
 
 - https://tekton.dev/docs/pipelines/pipelines/#specifying-workspaces[Specifying Workspaces]
+
+==== Debugging TaskRuns
+
+Tekton allows you to debug `TaskRuns` by setting breakpoints and inspecting the execution environment.
+
+**Adding Breakpoints:**
+
+- Modify the `TaskRun` to include a debug breakpoint.
+- This halts execution at a specified step, allowing inspection.
+
+**Inspecting the Environment:**
+
+- Access the pod associated with the `TaskRun`.
+- Use standard debugging tools to inspect files, environment variables, and running processes.
+
+**Tekton Documentation**
+
+- https://tekton.dev/docs/pipelines/debug/[Debugging TaskRuns]
+
+==== Common Issues and Solutions
+
+**TaskRun Failures:**
+
+**Issue:** A `TaskRun` fails unexpectedly.
+
+**Solution:**
+
+- Check the logs for error messages.
+- Verify that all required resources and parameters are correctly defined.
+- Ensure that the 
