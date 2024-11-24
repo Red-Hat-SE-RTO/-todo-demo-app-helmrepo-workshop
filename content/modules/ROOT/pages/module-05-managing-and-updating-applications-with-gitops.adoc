@@ -19,26 +19,29 @@ This module focuses on managing and updating applications using GitOps practices
 To update the application, make changes to the configuration files in the Git repository. Follow these steps:
 
 1. Clone the Git repository:
-   [source,bash]
-   ----
-   git clone <repository_url>
-   ----
+
+[source,bash]
+----
+git clone <repository_url>
+----
 
 2. Navigate to the application configuration directory:
-   [source,bash]
-   ----
-   cd <repository_directory>/config
-   ----
+
+[source,bash]
+----
+cd <repository_directory>/config
+----
 
 3. Make the necessary changes to the configuration files.
 
 4. Commit and push the changes to the Git repository:
-   [source,bash]
-   ----
-   git add .
-   git commit -m "Update application configuration"
-   git push origin main
-   ----
+
+[source,bash]
+----
+git add .
+git commit -m "Update application configuration"
+git push origin main
+----
 
 == Automated Updates with Argo CD
 
@@ -56,15 +59,16 @@ Argo CD automatically detects changes in the Git repository and deploys the upda
 
 GitOps makes it easy to perform rollbacks and manage version control for application deployments. Here's how:
 
-1. Identify the commit hash of the desired version to rollback to.
-2. Update the Git repository to the desired commit:
-   [source,bash]
-   ----
-   git checkout <commit_hash>
-   git push origin main
-   ----
+* Identify the commit hash of the desired version to rollback to.
+* Update the Git repository to the desired commit:
 
-3. Argo CD will detect the change and rollback the application to the specified version.
+[source,bash]
+----
+git checkout <commit_hash>
+git push origin main
+----
+
+* Argo CD will detect the change and rollback the application to the specified version.
 
 == Hands-on Exercise: Managing and Updating the Todo App
 
@@ -74,23 +78,294 @@ GitOps makes it easy to perform rollbacks and manage version control for applica
 * Observe how Argo CD automatically deploys the updates.
 * Practice performing rollbacks using Git and Argo CD.
 
+=== Access your termial 
+
+image::https://i.imgur.com/SU2lNmt.png[20241124100355]
+
+image::https://i.imgur.com/PXtANAO.png[20241124100422]
+
+=== Script Overview
+
+This Bash script sets up an ArgoCD environment by creating a secret and a config map in the specified namespace. It also ensures that the necessary policies and roles are in place for the pipeline to function correctly.
+
+=== Prerequisites
+
+Before running the script, ensure the following:
+- You have `kubectl` and `oc` (OpenShift CLI) installed and configured.
+- You have the necessary permissions to create secrets, config maps, and manage policies in the OpenShift cluster.
+- The OpenShift cluster is running and accessible.
+
+==== 2. **Define Variables**
+
+```bash
+# Define the namespace, secret name, and config map name
+USERNAME=yourusername
+NAMESPACE="todo-demo-app-${USERNAME}"
+SECRET_NAME="argocd-env-secret"
+CONFIG_MAP_NAME="argocd-env-configmap"
+
+nameSpace=openshift-gitops
+SERVER=$(oc get route openshift-gitops-server -n ${nameSpace} -o jsonpath='{.spec.host}')
+USERNAME=admin
+PASSWORD="ASK the LAB instructor for password"
+```
+
+- **Purpose**:
+  - **NAMESPACE**: The namespace where the secret and config map will be created.
+  - **SECRET_NAME**: The name of the secret to be created.
+  - **CONFIG_MAP_NAME**: The name of the config map to be created.
+  - **nameSpace**: The namespace where the OpenShift GitOps server is running.
+  - **SERVER**: The hostname of the OpenShift GitOps server.
+  - **USERNAME**: The username for ArgoCD.
+  - **PASSWORD**: The password for ArgoCD, retrieved from the OpenShift secret and decoded from base64.
+
+====  **Encode Username and Password**
+
+```bash
+# Encode the username and password as base64
+USERNAME_BASE64=$(echo -n "${USERNAME}" | base64)
+PASSWORD_BASE64=$(echo -n "${PASSWORD}" | base64)
+```
+
+- **Purpose**:
+  - **USERNAME_BASE64**: The username is encoded to base64.
+  - **PASSWORD_BASE64**: The password is encoded to base64.
+
+====  **Create ArgoCD Secret**
+
+```bash
+# Create the ArgoCD secret
+oc create secret generic "${SECRET_NAME}" \
+  --namespace="${NAMESPACE}" \
+  --from-literal="ARGOCD_USERNAME=$(echo ${USERNAME_BASE64} | base64 --decode)" \
+  --from-literal="ARGOCD_PASSWORD=$(echo ${PASSWORD_BASE64} | base64 --decode)"
+```
+
+- **Purpose**:
+  - This command creates a generic Kubernetes secret in the specified namespace.
+  - The secret contains the ArgoCD username and password, which are decoded from the base64-encoded values.
+
+
+==== **Create ArgoCD Config Map**
+
+```bash
+# Create the ArgoCD config map
+oc create configmap "${CONFIG_MAP_NAME}" \
+  --namespace="${NAMESPACE}" \
+  --from-literal="ARGOCD_SERVER=${SERVER}:443"
+```
+
+- **Purpose**:
+  - This command creates a Kubernetes config map in the specified namespace.
+  - The config map contains the ArgoCD server URL, which includes the hostname and port (443).
+
+=== Edit pipeline Pipelines->Pipelines->argocd-quay-todo-demo-app-pipeline-yourusername
+
+*Update argocd-quay-todo-demo-app-pipeline-yourusername*
+
+TIP: change `todo-demo-app` to `todo-demo-app-yourusername`
+
 [source,bash]
 ----
-# Example commands for updating and rolling back the Todo app
-git clone <repository_url>
-cd <repository_directory>/config
-# Make changes to the configuration files
-git add .
-git commit -m "Update Todo app configuration"
-git push origin main
-# Rollback to a previous version
-git checkout <commit_hash>
-git push origin main
+    - name: argocd-task-sync-and-wait
+      params:
+        - name: application-name
+          value: todo-demo-app-yourusername
 ----
 
-== Module Summary
+image::https://i.imgur.com/wpXYbuw.pngg[20241124114442]
 
+image::https://i.imgur.com/nip6Qgr.png[20241124103949]
+
+TIP: Change the IMAGE_TAG and QUAY_IO_IMAGE_TAG_NAME so there is a change 
+
+=== Rerun the pipeline 
+
+[source,bash]
+----
+export USERNAME=yourusername
+export QUAY_ROUTE=$(oc get route -n quay-registry | grep quay-registry-quay-quay-registry | awk '{print $2}')
+export GITEA_ROUTE=$(oc get route -n gitea | grep gitea | awk '{print $2}')
+export IMAGE_TAG="v0.0.3" 
+export CURRENT_IMAGE_TAG="v1"
+export QUAY_IO_REPOSITORY="${QUAY_ROUTE}/${USERNAME}/todo-demo-app-${USERNAME}"
+export QUAY_IO_IMAGE_TAG_NAME="v0.0.3"
+export GIT_REPOSITORY="${GITEA_ROUTE}/${USERNAME}/todo-demo-app-helmrepo"
+export GIT_EMAIL="pipeline@example.com"
+export GIT_NAME="todo-demo-app"
+export REPLICA_COUNT="1"
+export GIT_USERNAME="${USERNAME}"
+export GIT_TOKEN="password"
+export SHARED_WORKSPACE="shared-workspace-pvc-${USERNAME}"
+export MAVEN_SETTINGS_WORKSPACE="maven-settings-pvc-${USERNAME}"
+export HELM_SHARED_WORKSPACE="helm-workspace-pvc-${USERNAME}"
+export SECRET_VOLUME="container-registry-secret-${USERNAME}"
+export ARGOCD_SECRET_VOLUME=argocd-env-secret
+tkn pipeline start argocd-quay-todo-demo-app-pipeline-${USERNAME} \
+  --param IMAGE_TAG="${IMAGE_TAG}" \
+  --param CURRENT_IMAGE_TAG="${CURRENT_IMAGE_TAG}" \
+  --param quay-io-repository="${QUAY_IO_REPOSITORY}" \
+  --param quay-io-image-tag-name="${QUAY_IO_IMAGE_TAG_NAME}" \
+  --param GIT_REPOSITORY="${GIT_REPOSITORY}" \
+  --param GIT_EMAIL="${GIT_EMAIL}" \
+  --param GIT_NAME="${GIT_NAME}" \
+  --param REPLICA_COUNT="${REPLICA_COUNT}" \
+  --param GIT_USERNAME="${GIT_USERNAME}" \
+  --param GIT_TOKEN="${GIT_TOKEN}" \
+  --workspace name=shared-workspace-${USERNAME},claimName="${SHARED_WORKSPACE}" \
+  --workspace name=maven-settings-${USERNAME},claimName="${MAVEN_SETTINGS_WORKSPACE}" \
+  --workspace name=helm-shared-workspace-${USERNAME},claimName="${HELM_SHARED_WORKSPACE}" \
+  --workspace name=secret-volume,secret="${SECRET_VOLUME}" \
+  --workspace name=argocd-env-secret,secret="${ARGOCD_SECRET_VOLUME}" \
+  --showlog
+----
+
+=== Result
+
+image::https://i.imgur.com/90veP7l.png[20241124103949]
+
+=== Review the ClusterTask argocd-task-sync-and-wait
+
+Location Pipelines->Tasks->argocd-task-sync-and-wait
+
+image::https://i.imgur.com/Q2xFyHA.png[20241124121436]
+
+
+== ClusterTask: Argo CD Sync and Wait
+
+== What is this Task?
+
+This Task is designed to help you sync (deploy) an Argo CD application and wait for it to be healthy. An Argo CD application is a way to manage and deploy your applications on Kubernetes. Think of it like a pipeline that connects your code in a Git repository to a Kubernetes cluster.
+
+== How Do I Use This Task?
+
+To use this Task, you'll need to provide some information about your Argo CD application and your cluster. Here's what you'll need to know:
+
+=== Application Information
+
+* **Application Name**: This is the name of the Argo CD application you want to deploy. This is like the name of your project.
+* **Revision**: This is the version of your application that you want to deploy. You can think of it like a Git branch or a specific version of your code.
+* **Additional Flags**: You can add any additional flags that you want to pass to the `argocd app sync` command. For example, you might want to use `--force` to override any existing deployments.
+
+=== Cluster Information
+
+* **Argo CD Server**: This is the address of your Argo CD server. This is where your application will be deployed.
+* **Username and Password**: You'll need to authenticate with your Argo CD server using a username and password. Make sure you have these credentials set up and ready to go!
+* **Authentication Token**: If you're using an authentication token, you can provide that instead of a username and password.
+
+== Parameters
+
+The Task has five parameters that you need to fill in:
+
+=== application-name
+
+* **Type**: String
+* **Description**: The name of the application to deploy.
+* **Default Value**: None
+* **Example Value**: `my-application`
+
+=== revision
+
+* **Type**: String
+* **Description**: The revision to deploy.
+* **Default Value**: `HEAD` (which means the latest version)
+* **Example Value**: `main` or `branch-name`
+
+=== flags
+
+* **Type**: String
+* **Description**: Additional flags to pass to the `argocd app sync` command.
+* **Default Value**: `--`
+* **Example Value**: `--force`
+
+=== argocd-version
+
+* **Type**: String
+* **Description**: The version of Argo CD to use.
+* **Default Value**: `v2.2.2`
+
+=== auth-type
+
+* **Type**: String
+* **Description**: The type of authentication to use (username/password or authentication token)
+* **Default Value**: `username/password`
+
+== Environment Variables
+
+The Task uses environment variables to connect to your Argo CD server and authenticate. You'll need to set up the following variables:
+
+=== ARGOCD_SERVER
+
+* **Description**: The address of your Argo CD server.
+* **Required**: Yes
+
+=== ARGOCD_USERNAME
+
+* **Description**: The username to use for authentication.
+* **Required**: Yes
+
+=== ARGOCD_PASSWORD
+
+* **Description**: The password to use for authentication.
+* **Required**: Yes
+
+=== ARGOCD_AUTH_TOKEN
+
+* **Description**: The authentication token to use.
+* **Required**: No
+
+== Steps
+
+The Task has a single step:
+
+=== login
+
+* **Image**: quay.io/argoproj/argocd:$(params.argocd-version)
+* **Name**: login
+* **Resources**: None
+* **Script**: 
+
+[source,bash]
+----
+  if [ -z "$ARGOCD_AUTH_TOKEN" ]; then
+    yes | argocd login "$ARGOCD_SERVER" --username="$ARGOCD_USERNAME" --password="$ARGOCD_PASSWORD";
+  fi
+  argocd app sync "$(params.application-name)" --revision "$(params.revision)" "$(params.flags)"
+  argocd app wait "$(params.application-name)" --health "$(params.flags)"
+----
+
+== Resources
+
+The Task uses two resources:
+
+=== argocd-env-configmap
+
+* **Description**: A ConfigMap containing environment variables for the Task.
+* **Required**: Yes
+
+=== argocd-env-secret
+
+* **Description**: A Secret containing environment variables for the Task.
+* **Required**: Yes
+
+== Labels
+
+The Task has two labels:
+
+=== app.kubernetes.io/version
+
+* **Value**: 0.2
+
+=== operator.tekton.dev/provider-type
+
+* **Value**: community
+
+
+== Module Summary
+ClusterTaskCT
+argocd-task-sync-and-wait
 Key takeaways from this module:
+
 * Making changes to applications through Git.
 * Automated updates with Argo CD.
 * Rollbacks and version control in GitOps.
