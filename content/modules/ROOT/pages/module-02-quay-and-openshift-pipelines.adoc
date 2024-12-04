@@ -58,7 +58,7 @@ oc login -u <username> -p <password> <cluster-url>
 === Configure Gitea
 *Access the Gita URL*
 
-image::https://i.imgur.com/geLhBZt.png[20241120132152]
+image::module-02-quay-and-openshift-pipelines/geLhBZt.png[20241120132152]
 
 *Using OpenShift CLI*
 [source,bash]
@@ -68,14 +68,14 @@ echo "USER ME: $(oc get route -n quay-registry    | grep quay-registry  | awk '{
 
 *Login using your username and password*
 
-image::https://i.imgur.com/NYongvc.png[20241120132256]
+image::module-02-quay-and-openshift-pipelines/NYongvc.png[20241120132256]
 
-image::https://i.imgur.com/SlaEcvQ.png[20241120132320]
+image::module-02-quay-and-openshift-pipelines/SlaEcvQ.png[20241120132320]
 
 === Configure Quay 
 *Access the Quay repo URL*
 
-image::https://i.imgur.com/2OAy0PI.png[20241120131939]
+image::module-02-quay-and-openshift-pipelines/2OAy0PI.png[20241120131939]
 
 *Create User account in Quay*
 
@@ -83,43 +83,43 @@ image::https://i.imgur.com/2OAy0PI.png[20241120131939]
 * Email: your-username@example.com
 * Password: quay-playground
 
-image::https://i.imgur.com/eJ1FRp1.png[20241120132529]
+image::module-02-quay-and-openshift-pipelines/eJ1FRp1.png[20241120132529]
 
 *Create todo-app Repository*
 
 TIP: REPONAME: todo-demo-app-yourusername
 
-image::https://i.imgur.com/nZlQfh3.png[20241120132918]
+image::module-02-quay-and-openshift-pipelines/nZlQfh3.png[20241120132918]
 
-image::https://i.imgur.com/5L48WnP.png[20241120132949]
+image::module-02-quay-and-openshift-pipelines/5L48WnP.png[20241120132949]
 
 *Create Robot accout for Repo*
 
 TIP: Click on Account Settings
 
-image::https://i.imgur.com/7raL0gY.png[20241120133048]
+image::module-02-quay-and-openshift-pipelines/7raL0gY.png[20241120133048]
 
 *Click on Robot Accounts*
 
-image::https://i.imgur.com/Y4ocPGk.png[20241120133132]
+image::module-02-quay-and-openshift-pipelines/Y4ocPGk.png[20241120133132]
 
 *Click on `Create robot account`*
 
 TIP: Provide a name for your new robot account: todo_demo_app_yourusername
 
-image::https://i.imgur.com/cO1EaVF.png[20241120133242]
+image::module-02-quay-and-openshift-pipelines/cO1EaVF.png[20241120133242]
 
-image::https://i.imgur.com/5We8Sua.png[20241120133355]
+image::module-02-quay-and-openshift-pipelines/5We8Sua.png[20241120133355]
 
 *Add Permissions to the created account* 
 
-image::https://i.imgur.com/KdlqZx3.png[20241120133453]
+image::module-02-quay-and-openshift-pipelines/KdlqZx3.png[20241120133453]
 
-image::https://i.imgur.com/v1ba4RE.png[20241120133542]
+image::module-02-quay-and-openshift-pipelines/v1ba4RE.png[20241120133542]
 
 *Collect Credentials 
 
-image::https://i.imgur.com/arAZrBY.png[20241120133857]
+image::module-02-quay-and-openshift-pipelines/arAZrBY.png[20241120133857]
 
 === Configure OpenShift Secret
 
@@ -127,15 +127,15 @@ image::https://i.imgur.com/arAZrBY.png[20241120133857]
 
 TIP:  Click on Kubernetes Secret -> View  yourusername+todo_demo_app_yourusername.yaml
 
-image::https://i.imgur.com/2k9ORSd.png[20241120134031]
+image::module-02-quay-and-openshift-pipelines/2k9ORSd.png[20241120134031]
 
 *Copy secret into OpenShift with the name container-registry-secret-yourusername*
 
 TIP: Use the + icon in the top right corner of the OpenShift console to quickly add YAML. Make sure you are in the todo-demo-app-yourusername!
 
-image::https://i.imgur.com/5pHGOUf.png[20241120134226]
+image::module-02-quay-and-openshift-pipelines/5pHGOUf.png[20241120134226]
 
-image::https://i.imgur.com/7MMi7aB.png[20241120134252]
+image::module-02-quay-and-openshift-pipelines/7MMi7aB.png[20241120134252]
 
 
 == Module Summary

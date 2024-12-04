@@ -66,9 +66,9 @@ oc login -u <username> -p <password> <cluster-url>
 
 == Tekton Pipeline Documentation
 
-image::https://i.imgur.com/I0DeIgW.png[20241121124441]
+image::module-04-tekton-pipelines-for-gitops/I0DeIgW.png[20241121124441]
 
-image::https://i.imgur.com/3ffuu0l.png[20241123191017]
+image::module-04-tekton-pipelines-for-gitops/3ffuu0l.png[20241123191017]
 
 === Overview
 
@@ -210,9 +210,9 @@ The Tekton Task named `push-todo-demo-app-image-to-quay-yourusername`. The task 
 
 https://github.com/tosin2013/todo-demo-app-helmrepo/blob/main/openshift-pipelines/pushImageToQuay.yaml[Reference]
 
-image::https://i.imgur.com/uzU61Dq.png[20241123190136]
+image::module-04-tekton-pipelines-for-gitops/uzU61Dq.png[20241123190136]
 
-image::https://i.imgur.com/hRgxkwm.png[20241123191114]
+image::module-04-tekton-pipelines-for-gitops/hRgxkwm.png[20241123191114]
 
 === Prerequisites
 
@@ -346,9 +346,9 @@ The task accepts the following parameters:
 
 TIP: Click on `start` to start pipeline 
 
-image::https://i.imgur.com/mkKpvT2.png[20241123211114]
+image::module-04-tekton-pipelines-for-gitops/mkKpvT2.png[20241123211114]
 
-image::https://i.imgur.com/sAuoVpv.png[20241123211251]
+image::module-04-tekton-pipelines-for-gitops/sAuoVpv.png[20241123211251]
 
 
 === Using the CLI
@@ -357,11 +357,11 @@ image::https://i.imgur.com/sAuoVpv.png[20241123211251]
 
 - Open the `OpenShift command line terminal`
 
-image::https://i.imgur.com/NAncCUB.png[20241124083024]
+image::module-04-tekton-pipelines-for-gitops/NAncCUB.png[20241124083024]
 
 - Start the terminal 
 
-image::https://i.imgur.com/FSGoddR.png[20241124083117]
+image::module-04-tekton-pipelines-for-gitops/FSGoddR.png[20241124083117]
 
 - Collect Variables
 
@@ -430,11 +430,11 @@ tkn pipeline start argocd-quay-todo-demo-app-pipeline-${USERNAME} \
   --showlog
 ----
 
-image::https://i.imgur.com/DQ09Lma.png[20241124084718]
+image::module-04-tekton-pipelines-for-gitops/DQ09Lma.png[20241124084718]
 
 *Press `y` to install tekton cli*
 
-image::https://i.imgur.com/uz7iOpc.jpeg[20241124094352]
+image::module-04-tekton-pipelines-for-gitops/uz7iOpc.jpeg[20241124094352]
 
    - **Explanation**:
      - `tkn pipeline start` is the command to start a Tekton pipeline.
@@ -445,5 +445,5 @@ image::https://i.imgur.com/uz7iOpc.jpeg[20241124094352]
 
 == The pipeline will fail but we will fix it in the next section
 
-image::https://i.imgur.com/HKkl3mW.png[20241124081958]
+image::module-04-tekton-pipelines-for-gitops/HKkl3mW.png[20241124081958]
 

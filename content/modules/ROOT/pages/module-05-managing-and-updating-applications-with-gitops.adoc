@@ -80,9 +80,9 @@ git push origin main
 
 === Access your termial 
 
-image::https://i.imgur.com/SU2lNmt.png[20241124100355]
+image::module-05-managing-and-updating-applications-with-gitops/SU2lNmt.png[20241124100355]
 
-image::https://i.imgur.com/PXtANAO.png[20241124100422]
+image::module-05-managing-and-updating-applications-with-gitops/PXtANAO.png[20241124100422]
 
 === Script Overview
 
@@ -173,9 +173,9 @@ TIP: change `todo-demo-app` to `todo-demo-app-yourusername`
           value: todo-demo-app-yourusername
 ----
 
-image::https://i.imgur.com/wpXYbuw.pngg[20241124114442]
+image::module-05-managing-and-updating-applications-with-gitops/wpXYbuw.pngg[20241124114442]
 
-image::https://i.imgur.com/nip6Qgr.png[20241124103949]
+image::module-05-managing-and-updating-applications-with-gitops/nip6Qgr.png[20241124103949]
 
 TIP: Change the IMAGE_TAG and QUAY_IO_IMAGE_TAG_NAME so there is a change 
 
@@ -222,13 +222,13 @@ tkn pipeline start argocd-quay-todo-demo-app-pipeline-${USERNAME} \
 
 === Result
 
-image::https://i.imgur.com/90veP7l.png[20241124103949]
+image::module-05-managing-and-updating-applications-with-gitops/90veP7l.png[20241124103949]
 
 === Review the ClusterTask argocd-task-sync-and-wait
 
 Location Pipelines->Tasks->argocd-task-sync-and-wait
 
-image::https://i.imgur.com/Q2xFyHA.png[20241124121436]
+image::module-05-managing-and-updating-applications-with-gitops/Q2xFyHA.png[20241124121436]
 
 
 == ClusterTask: Argo CD Sync and Wait

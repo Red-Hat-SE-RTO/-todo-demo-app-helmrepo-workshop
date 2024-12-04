@@ -105,17 +105,17 @@ ArgoCD has  features such as:
 
 *Navigate to the Gitea Project*
 
-image::https://i.imgur.com/xWIcfZq.png[20241121095820]
+image::module-03-deploying-todo-app-with-gitops/xWIcfZq.png[20241121095820]
 
 *Access the Gita URL*
 
-image::https://i.imgur.com/geLhBZt.png[20241120132152]
+image::module-03-deploying-todo-app-with-gitops/geLhBZt.png[20241120132152]
 
 *Change the `app-config/cluster-config.yaml` to your repo url*
 
 TIP: Example https://gitea-gitea.apps.ocp4.example.com/yourusername/todo-demo-app-helmrepo.git
 
-image::https://i.imgur.com/HdrM1GK.png[20241121095717]
+image::module-03-deploying-todo-app-with-gitops/HdrM1GK.png[20241121095717]
 
 *Change the `app/kustomization.yaml`  namespace to your namespace*
 
@@ -125,7 +125,7 @@ TIP: spec->destination->namespace `todo-demo-app-yourusername`
 
 TIP: spec->project `yourusername-project`
 
-image::https://i.imgur.com/PKWQ2YP.png[20241121105934]
+image::module-03-deploying-todo-app-with-gitops/PKWQ2YP.png[20241121105934]
 
 *Login into the ArgoCD instance*
 
@@ -133,11 +133,11 @@ image::https://i.imgur.com/PKWQ2YP.png[20241121105934]
 
 TIP: Click on `LOG IN VIA OPENSHIFT`
 
-image::https://i.imgur.com/vv66B8w.png[20241121095839]
+image::module-03-deploying-todo-app-with-gitops/vv66B8w.png[20241121095839]
 
 *Use your OpenShift username and password to access cluster and Authorize Access*
 
-image::https://i.imgur.com/4tgyZp3.png[20241121095857]
+image::module-03-deploying-todo-app-with-gitops/4tgyZp3.png[20241121095857]
 
 *Configure your Repo under Settings->Repositories*
 
@@ -151,35 +151,35 @@ TIP: Enter the vaules below
 
 *Validate the connection was `Successful`*
 
-image::https://i.imgur.com/BeVm5pE.png[20241121095924]
+image::module-03-deploying-todo-app-with-gitops/BeVm5pE.png[20241121095924]
 
 *Copy the configuration from your Gitea Repo into ArgoCD*
 
-image::https://i.imgur.com/HdrM1GK.png[20241121095717]
+image::module-03-deploying-todo-app-with-gitops/HdrM1GK.png[20241121095717]
 
 *Click on the `EDIT AS YAML`*
 
-image::https://i.imgur.com/lOegQXV.png[20241121115305]
+image::module-03-deploying-todo-app-with-gitops/lOegQXV.png[20241121115305]
 
 *Save the yaml configuration in ArgoCD*
 
-image::https://i.imgur.com/03yoddA.png[20241121100106]
+image::module-03-deploying-todo-app-with-gitops/03yoddA.png[20241121100106]
 
 *Click Create to start deployment*
 
-image::https://i.imgur.com/fjOQ7hl.png[20241121100117]
+image::module-03-deploying-todo-app-with-gitops/fjOQ7hl.png[20241121100117]
 
 *Validate ArgoCD Sync status*
 
-image::https://i.imgur.com/SORX1Nm.png[20241121105811]
+image::module-03-deploying-todo-app-with-gitops/SORX1Nm.png[20241121105811]
 
 *Navigate to your todo-demo-app-yourusername namespace and select route*
 
-image::https://i.imgur.com/JhoRVaw.png[20241121105841]
+image::module-03-deploying-todo-app-with-gitops/JhoRVaw.png[20241121105841]
 
 *View deployed application*
 
-image::https://i.imgur.com/UUZP74r.png[20241121105910]
+image::module-03-deploying-todo-app-with-gitops/UUZP74r.png[20241121105910]
 
 
 == Module Summary
